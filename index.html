@@ -568,8 +568,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '31.7';
+const APP_VERSION = '31.8';
 const CHANGELOG = [
+  ['31.8', '2026-11-24', 'โปรแกรม 1: จับคู่ชื่อช่างจากไฟล์แพลนเดิมแบบยืดหยุ่น (ชื่อไทยสะกดต่างกัน 1 ตัวอักษรยังจับคู่ได้ ถ้าตรงช่างคนเดียว) และแก้ชื่อช่างลำดับ 4 ที่ค้างในเครื่องเป็น ไพโรจน์ นิยมเดชา'],
   ['31.7', '2026-11-24', 'ข้อมูลช่างลำดับ 4 (เขตสวนหลวง): เปลี่ยนชื่อเป็น ไพโรจน์ นิยมเดชา และข้อมูล LINE'],
   ['31.6', '2026-11-18', 'โปรแกรม 3: ย้ายกล่อง "งานใหม่ที่ไม่มีในแพลน" ขึ้นเหนือ "งานหาย" และใส่สีส้มเด่นเมื่อมีงานใหม่'],
   ['31.5', '2026-11-18', 'โปรแกรม 2: ลูกค้า "แอดวานซ์ ไวร์เลส เน็ทเวอร์ค" แจ้งเตือนสีแดงว่าห้ามดึงย้ายทีมให้ Partner ต้องให้ทีมพื้นที่ที่ได้งานเข้าแก้ไข'],
@@ -997,6 +998,7 @@ async function loadState() {
     memStore.ok = true;
   } catch (e) { memStore.ok = false; memStore.warn = 'เบราว์เซอร์นี้ไม่อนุญาตให้บันทึกข้อมูลถาวร ข้อมูลจะหายเมื่อปิดหน้านี้ กรุณากด "สำรองข้อมูล" เป็นระยะ'; }
   S = S || freshState();
+  S.techs.forEach(t => { if (t.id === 't4' && /ภานุวัฒน์|นิยิมเดชา/.test(t.name)) t.name = 'ไพโรจน์ นิยมเดชา'; });
 }
 let saveTimer = null;
 function save() {
@@ -1531,7 +1533,13 @@ function thaiOnly(t) { return String(t || '').replace(/[^\u0E00-\u0E7F\s]/g, ' '
 function matchTech(name) {
   const v = thaiOnly(name); if (!v) return null; const vn = v.replace(/\s/g, '');
   const hit = S.techs.filter(t => { const tn = thaiOnly(t.name), parts = tn.split(' ').filter(Boolean); if (!parts.length) return false; if (vn.includes(tn.replace(/\s/g, ''))) return true; return parts.length >= 2 && parts.every(x => vn.includes(x)); });
-  return hit.length === 1 ? hit[0] : null;
+  if (hit.length === 1) return hit[0];
+  if (hit.length > 1) return null;
+  // ไม่พบแบบตรงตัว: จับคู่แบบยืดหยุ่น (สะกดต่างกัน 1 ตัวอักษรต่อคำ) เฉพาะเมื่อมีช่างตรงเพียงคนเดียว
+  const vp = v.split(' ').filter(Boolean);
+  const near = (a, b) => { if (a === b) return true; if (a.length < 4 || b.length < 4 || Math.abs(a.length - b.length) > 1) return false; const d = []; for (let i = 0; i <= a.length; i++) { d[i] = [i]; } for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[a.length][b.length] <= 1; };
+  const fz = S.techs.filter(t => { const parts = thaiOnly(t.name).split(' ').filter(Boolean); return parts.length >= 2 && parts.every(x => vp.some(y => near(x, y))); });
+  return fz.length === 1 ? fz[0] : null;
 }
 function applyPlanned(up, seen, ts) {
   const rep = { locked: 0, noName: 0, noMatch: {}, noSlot: [], frozen: 0, double: 0, dates: new Set() };
