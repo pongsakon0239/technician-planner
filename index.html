@@ -279,6 +279,8 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
 #p3newPanel.hasnew #p3newn{color:#fff!important;background:#f97316;border-radius:999px;padding:2px 12px;font-weight:800!important}
 :root[data-theme="dark"] #p3newPanel.hasnew{background:linear-gradient(135deg,#3a2210,#4a2a10)} :root[data-theme="dark"] #p3newPanel.hasnew h2{color:#fdba74}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #p3newPanel.hasnew{background:linear-gradient(135deg,#3a2210,#4a2a10)} :root:not([data-theme="light"]) #p3newPanel.hasnew h2{color:#fdba74}}
+
+.p3 #p3tbl tr.copied td{background:color-mix(in srgb,#facc15 38%,var(--panel));box-shadow:inset 0 0 0 1px #eab308} .p3 #p3tbl tr.copied td:first-child{box-shadow:inset 4px 0 0 #eab308} .p3 #p3tbl tr.copied [data-p3cp]{font-weight:700} .p3 #p3cpLines.done{outline:2px solid #eab308}
 </style>
 <div id="p1" hidden>
 <header class="top">
@@ -585,8 +587,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '32.3';
+const APP_VERSION = '32.4';
 const CHANGELOG = [
+  ['32.4', '2026-11-25', 'โปรแกรม 3: งานใหม่ที่ไม่มีในแพลน — ไฮไลต์สีเหลืองที่แถวที่เพิ่งคัดลอก (ปุ่มเปลี่ยนเป็น "✓ คัดลอกแล้ว") คัดลอก non อื่นไฮไลต์จะย้ายตาม คัดลอกทั้งหมดไฮไลต์ทุกแถว'],
   ['32.3', '2026-11-25', 'โปรแกรม 3: กล่อง "งานใหม่ที่ไม่มีในแพลน" เพิ่มปุ่ม "คัดลอกทั้งหมด" ที่หัวคอลัมน์ข้างปุ่มรายแถว และแสดงจำนวนงานบนปุ่มด้านบน'],
   ['32.2', '2026-11-25', 'โปรแกรม 4: เพิ่มดรอปดาวเลือกทีมจากคอลัมน์ Contract Team (แสดงจำนวนใบงานต่อทีม) เพื่อดึงเฉพาะทีมเดียว'],
   ['32.1', '2026-11-25', 'โปรแกรม 4: เพิ่มช่องค้นหา non (ใส่หลายเลขได้) และช่องค้นหาทีม (อ่านจากคอลัมน์ Contract Team) ปุ่มคัดลอกทั้งหมดคัดลอกเฉพาะที่แสดงตามการค้นหา และปุ่มคัดลอกรายใบงานระบุเลข non'],
@@ -2749,6 +2752,12 @@ const P3 = (() => {
     } catch (e) { toast('อ่านไฟล์ไม่ได้: ' + e.message, 'err'); }
   }
   function refreshMaps() { const h = ['ma', 'om'].filter(k => SRC[k].raw).map(renderMaps).join(''); $$('p3maps').innerHTML = h; $$('p3mapDet').hidden = !h; }
+  function markCopied(idx) { // ไฮไลต์แถวที่เพิ่งคัดลอก (idx = ลำดับแถว หรือ 'all') ครั้งใหม่ย้ายไฮไลต์ไปแถวใหม่
+    const rows = $$('p3tbl').querySelectorAll('tbody tr');
+    rows.forEach((tr, i) => { const on = idx === 'all' || idx === i; tr.classList.toggle('copied', on); const bt = tr.querySelector('[data-p3cp]'); if (bt) bt.textContent = on ? '✓ คัดลอกแล้ว' : 'คัดลอก'; });
+    const all = $$('p3tbl').querySelector('[data-p3cpall]'); if (all) all.textContent = (idx === 'all' ? '✓ คัดลอกทั้งหมดแล้ว (' : 'คัดลอกทั้งหมด (') + rows.length + ')';
+    const top = $$('p3cpLines'); if (top) top.classList.toggle('done', idx === 'all');
+  }
   async function copy(t) { try { await navigator.clipboard.writeText(t); toast('คัดลอกแล้ว', 'ok'); return; } catch (e) {} const ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); toast(ok ? 'คัดลอกแล้ว' : 'คัดลอกอัตโนมัติไม่ได้ กรุณาเลือกข้อความแล้วกด Ctrl+C', ok ? 'ok' : 'err'); }
   function init() {
     ['MA', 'OM'].forEach(K => {
@@ -2763,7 +2772,7 @@ const P3 = (() => {
     $$('p3paste').addEventListener('input', render); $$('p3date').addEventListener('change', render);
     $$('p3maps').addEventListener('change', e => { const k = e.target.dataset.p3map; if (!k) return; SRC[k].map[e.target.dataset.k] = +e.target.value; render(); });
     $$('p3clear').addEventListener('click', () => { ['ma', 'om'].forEach(k => { SRC[k].raw = null; SRC[k].rows = []; SRC[k].file = ''; $$('p3stat' + k.toUpperCase()).textContent = 'ยังไม่ได้เลือกไฟล์'; }); $$('p3paste').value = ''; $$('p3date').value = ''; refreshMaps(); res = null; $$('p3trk').hidden = true; $$('p3trkEmpty').hidden = false; $$('p3out').hidden = true; $$('p3count').textContent = ''; $$('p3pinfo').textContent = 'ยังไม่ได้วางข้อมูล'; });
-    $$('p3tbl').addEventListener('click', e => { if (e.target.closest('[data-p3cpall]')) { if (res && res.nw.length) copy(res.nw.map(x => x.line).join('\n')); return; } const b = e.target.closest('[data-p3cp]'); if (!b || !res) return; const x = res.nw[+b.dataset.p3cp]; copy(x.line); });
+    $$('p3tbl').addEventListener('click', e => { if (e.target.closest('[data-p3cpall]')) { if (res && res.nw.length) { copy(res.nw.map(x => x.line).join('\n')); markCopied('all'); } return; } const b = e.target.closest('[data-p3cp]'); if (!b || !res) return; const x = res.nw[+b.dataset.p3cp]; copy(x.line); markCopied(+b.dataset.p3cp); });
     $$('p3st').addEventListener('click', e => {
       if (!res) return; const a = e.target.closest('[data-p3stall]'), b = e.target.closest('[data-p3st]');
       const L = k => k === 'overdue' ? overdue : (stGroups[k] || []);
@@ -2778,8 +2787,8 @@ const P3 = (() => {
       if (a) { const l = a.dataset.p3missall === 'gone' ? missList.filter(x => x.kind === 'missing') : missList; if (l.length) copy(hd + l.map(missTxt).join('\n')); }
       else if (b && b.dataset.p3miss !== 'msg') { const x = missList[+b.dataset.p3miss]; if (x) copy(missTxt(x)); } });
     $$('p3nfPanel').addEventListener('input', e => { if (e.target.dataset.p3miss === 'msg') { missMsg = e.target.value; try { localStorage.setItem('p3missmsg', missMsg); } catch (x) {} } });
-    $$('p3cpLines').addEventListener('click', () => { if (res && res.nw.length) copy(res.nw.map(x => x.line).join('\n')); });
-    $$('p3cpTable').addEventListener('click', () => { if (res && res.nw.length) copy(res.nw.map(x => [x.line, x.eng, x.team].join('\t')).join('\n')); });
+    $$('p3cpLines').addEventListener('click', () => { if (res && res.nw.length) { copy(res.nw.map(x => x.line).join('\n')); markCopied('all'); } });
+    $$('p3cpTable').addEventListener('click', () => { if (res && res.nw.length) { copy(res.nw.map(x => [x.line, x.eng, x.team].join('\t')).join('\n')); markCopied('all'); } });
   }
   return { init, _t: { get res() { return res; }, SRC, extractNon, pdate } };
 })();
