@@ -585,8 +585,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '32.2';
+const APP_VERSION = '32.3';
 const CHANGELOG = [
+  ['32.3', '2026-11-25', 'โปรแกรม 3: กล่อง "งานใหม่ที่ไม่มีในแพลน" เพิ่มปุ่ม "คัดลอกทั้งหมด" ที่หัวคอลัมน์ข้างปุ่มรายแถว และแสดงจำนวนงานบนปุ่มด้านบน'],
   ['32.2', '2026-11-25', 'โปรแกรม 4: เพิ่มดรอปดาวเลือกทีมจากคอลัมน์ Contract Team (แสดงจำนวนใบงานต่อทีม) เพื่อดึงเฉพาะทีมเดียว'],
   ['32.1', '2026-11-25', 'โปรแกรม 4: เพิ่มช่องค้นหา non (ใส่หลายเลขได้) และช่องค้นหาทีม (อ่านจากคอลัมน์ Contract Team) ปุ่มคัดลอกทั้งหมดคัดลอกเฉพาะที่แสดงตามการค้นหา และปุ่มคัดลอกรายใบงานระบุเลข non'],
   ['32', '2026-11-25', 'เพิ่มโปรแกรม 4: รายละเอียดงาน (กรณี SOA ล่ม) — อัปโหลดไฟล์ใบงานแบบเดิม สร้างข้อความ 8 หัวข้อ (Field Engineer, Access Number, Plan Arrival Time, Address, Title, Latitude/Longitude, Customer Name, Contact Phone Number) พร้อมคัดลอกรายใบ/ทั้งหมด และส่งออก Excel'],
@@ -2724,7 +2725,8 @@ const P3 = (() => {
     $$('p3warn').innerHTML = warn.map(w => '<div class="banner ' + (w.t === 'risk' ? 'risk' : 'warn') + '" style="margin-bottom:8px">' + (w.t === 'risk' ? '✖ ' : '⚠ ') + esc(w.m) + '</div>').join('');
     $$('p3newn').textContent = nw.length ? '· ' + nw.length + ' งาน' : '';
     $$('p3newPanel').classList.toggle('hasnew', nw.length > 0);
-    $$('p3tbl').innerHTML = nw.length ? '<thead><tr><th>#</th><th>① บรรทัดแพลน</th><th>② ชื่อช่างที่ได้รับงาน</th><th>③ ชื่อทีมที่ได้รับงาน</th><th>ไฟล์</th><th>ข้อควรตรวจ</th><th></th></tr></thead><tbody>' + nw.map((x, i) => '<tr><td>' + (i + 1) + '</td><td><code>' + esc(x.line) + '</code></td><td>' + (x.eng ? esc(x.eng) : '<span class="muted">—</span>') + '</td><td>' + (x.team ? esc(x.team) : '<span class="muted">—</span>') + '</td><td><span class="pill ' + (x.src === 'om' ? 'ok' : 'off') + '">' + (x.src === 'om' ? 'OM' : 'MA') + '</span></td><td>' + (x.warn.length ? '<span class="pill warn">⚠ ' + esc(x.warn.join(' · ')) + '</span>' : '') + (x.dupN > 1 ? ' <span class="pill warn">non ซ้ำ ' + x.dupN + ' ใบงาน</span>' : '') + '</td><td><button class="btn small" data-p3cp="' + i + '">คัดลอก</button></td></tr>').join('') + '</tbody>' : '<tbody><tr><td class="muted" style="padding:14px">ไม่มีงานใหม่ — ทุก non ในไฟล์มีในแพลนแล้ว</td></tr></tbody>';
+    $$('p3cpLines').textContent = 'คัดลอกบรรทัดแพลนทั้งหมด (' + nw.length + ' งาน)';
+    $$('p3tbl').innerHTML = nw.length ? '<thead><tr><th>#</th><th>① บรรทัดแพลน</th><th>② ชื่อช่างที่ได้รับงาน</th><th>③ ชื่อทีมที่ได้รับงาน</th><th>ไฟล์</th><th>ข้อควรตรวจ</th><th><button class="btn small primary" data-p3cpall="1">คัดลอกทั้งหมด (' + nw.length + ')</button></th></tr></thead><tbody>' + nw.map((x, i) => '<tr><td>' + (i + 1) + '</td><td><code>' + esc(x.line) + '</code></td><td>' + (x.eng ? esc(x.eng) : '<span class="muted">—</span>') + '</td><td>' + (x.team ? esc(x.team) : '<span class="muted">—</span>') + '</td><td><span class="pill ' + (x.src === 'om' ? 'ok' : 'off') + '">' + (x.src === 'om' ? 'OM' : 'MA') + '</span></td><td>' + (x.warn.length ? '<span class="pill warn">⚠ ' + esc(x.warn.join(' · ')) + '</span>' : '') + (x.dupN > 1 ? ' <span class="pill warn">non ซ้ำ ' + x.dupN + ' ใบงาน</span>' : '') + '</td><td><button class="btn small" data-p3cp="' + i + '">คัดลอก</button></td></tr>').join('') + '</tbody>' : '<tbody><tr><td class="muted" style="padding:14px">ไม่มีงานใหม่ — ทุก non ในไฟล์มีในแพลนแล้ว</td></tr></tbody>';
     renderStatus(); renderFoa(); renderDash();
     $$('p3matchSum').textContent = 'ตรงกับแพลนแล้ว ' + matched.length + ' non (ไม่ต้องดำเนินการ)';
     $$('p3match').innerHTML = matched.length ? matched.map(m => '<code>' + esc(m.a) + '</code>' + (m.pc > 1 ? ' ×' + m.pc : '')).join(' · ') : '<span class="muted">ยังไม่มี</span>';
@@ -2761,7 +2763,7 @@ const P3 = (() => {
     $$('p3paste').addEventListener('input', render); $$('p3date').addEventListener('change', render);
     $$('p3maps').addEventListener('change', e => { const k = e.target.dataset.p3map; if (!k) return; SRC[k].map[e.target.dataset.k] = +e.target.value; render(); });
     $$('p3clear').addEventListener('click', () => { ['ma', 'om'].forEach(k => { SRC[k].raw = null; SRC[k].rows = []; SRC[k].file = ''; $$('p3stat' + k.toUpperCase()).textContent = 'ยังไม่ได้เลือกไฟล์'; }); $$('p3paste').value = ''; $$('p3date').value = ''; refreshMaps(); res = null; $$('p3trk').hidden = true; $$('p3trkEmpty').hidden = false; $$('p3out').hidden = true; $$('p3count').textContent = ''; $$('p3pinfo').textContent = 'ยังไม่ได้วางข้อมูล'; });
-    $$('p3tbl').addEventListener('click', e => { const b = e.target.closest('[data-p3cp]'); if (!b || !res) return; const x = res.nw[+b.dataset.p3cp]; copy(x.line); });
+    $$('p3tbl').addEventListener('click', e => { if (e.target.closest('[data-p3cpall]')) { if (res && res.nw.length) copy(res.nw.map(x => x.line).join('\n')); return; } const b = e.target.closest('[data-p3cp]'); if (!b || !res) return; const x = res.nw[+b.dataset.p3cp]; copy(x.line); });
     $$('p3st').addEventListener('click', e => {
       if (!res) return; const a = e.target.closest('[data-p3stall]'), b = e.target.closest('[data-p3st]');
       const L = k => k === 'overdue' ? overdue : (stGroups[k] || []);
