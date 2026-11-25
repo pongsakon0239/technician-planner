@@ -435,7 +435,7 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
   <section class="panel" id="p4mapPanel" hidden><h2>② ตรวจสอบคอลัมน์ที่อ่านได้ <span class="muted" style="font-weight:400">(ปรับได้ถ้าไม่ตรง)</span></h2>
     <label style="display:flex;gap:6px;align-items:center;margin-bottom:10px;font-size:13px"><input type="checkbox" id="p4hdr"> แถวแรกเป็นหัวตาราง (ไม่นับเป็นใบงาน)</label>
     <div class="maps" id="p4maps"></div><div class="pvwrap" style="margin-top:12px" id="p4pv"></div></section>
-  <section id="p4out" hidden><div class="tools"><input type="search" id="p4q" placeholder="ค้นหา Access Number / ช่าง / ชื่อลูกค้า" style="min-width:240px;padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);color:var(--ink)"><label class="muted" style="font-size:13px">เรียงตาม <select id="p4sort"><option value="file">ลำดับในไฟล์</option><option value="eng">ชื่อช่าง</option><option value="time">เวลานัด</option></select></label><span class="grow" style="flex:1"></span><button class="btn small primary" id="p4copyAll">คัดลอกทั้งหมด</button><button class="btn small" id="p4xlsx">ส่งออก Excel</button></div><div id="p4list"></div></section>
+  <section id="p4out" hidden><div class="panel" style="border-left-color:var(--g-d)"><h2>ค้นหา / กรอง</h2><div class="tools"><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">ค้นหา non (Access Number) — ใส่หลายเลขได้ คั่นด้วยเว้นวรรค จุลภาค หรือขึ้นบรรทัดใหม่<textarea id="p4non" rows="2" placeholder="เช่น 8802524773 8800902904" style="min-width:300px;min-height:44px"></textarea></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">ค้นหาทีม<input type="search" id="p4team" list="p4teams" placeholder="พิมพ์หรือเลือกทีม" style="padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);color:var(--ink)"><datalist id="p4teams"></datalist></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">ค้นหาช่าง / ลูกค้า<input type="search" id="p4q" placeholder="ชื่อช่าง หรือ ชื่อลูกค้า" style="padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);color:var(--ink)"></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">เรียงตาม<select id="p4sort"><option value="file">ลำดับในไฟล์</option><option value="eng">ชื่อช่าง</option><option value="time">เวลานัด</option></select></label></div><div class="tools" style="margin-bottom:0"><button class="btn small primary" id="p4copyAll">คัดลอกทั้งหมด</button><button class="btn small" id="p4xlsx">ส่งออก Excel</button><span class="muted" style="font-size:12px">"คัดลอกทั้งหมด" คัดลอกเฉพาะใบงานที่แสดงอยู่ตามการค้นหา · แต่ละใบงานมีปุ่มคัดลอกของตัวเองในการ์ด</span></div></div><div id="p4list"></div></section>
 </div>
 
 <script>/*!
@@ -585,8 +585,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '32';
+const APP_VERSION = '32.1';
 const CHANGELOG = [
+  ['32.1', '2026-11-25', 'โปรแกรม 4: เพิ่มช่องค้นหา non (ใส่หลายเลขได้) และช่องค้นหาทีม (อ่านจากคอลัมน์ Contract Team) ปุ่มคัดลอกทั้งหมดคัดลอกเฉพาะที่แสดงตามการค้นหา และปุ่มคัดลอกรายใบงานระบุเลข non'],
   ['32', '2026-11-25', 'เพิ่มโปรแกรม 4: รายละเอียดงาน (กรณี SOA ล่ม) — อัปโหลดไฟล์ใบงานแบบเดิม สร้างข้อความ 8 หัวข้อ (Field Engineer, Access Number, Plan Arrival Time, Address, Title, Latitude/Longitude, Customer Name, Contact Phone Number) พร้อมคัดลอกรายใบ/ทั้งหมด และส่งออก Excel'],
   ['31.10', '2026-11-24', 'หน้าข้อมูลช่าง: เพิ่มปุ่มลบช่าง (กดสองขั้น ยืนยันก่อนลบ) — ถ้าช่างยังมีงานในแพลนจะไม่ให้ลบ'],
   ['31.9', '2026-11-24', 'หน้าข้อมูลช่าง: บันทึกอัตโนมัติทันทีที่พิมพ์ + ปุ่ม "บันทึกข้อมูลช่าง" แสดงเวลาที่บันทึก และขอให้เบราว์เซอร์เก็บข้อมูลถาวร'],
@@ -2793,7 +2794,8 @@ const P4 = (() => {
     { k: 'lat', th: 'Latitude', syn: ['latitude', 'lat'] },
     { k: 'lon', th: 'Longitude', syn: ['longitude', 'lon', 'long', 'lng'] },
     { k: 'cust', th: 'Customer Name', syn: ['customername', 'ชื่อลูกค้า'] },
-    { k: 'phone', th: 'Contact Phone Number', syn: ['contactphonenumber', 'contactphone', 'phonenumber', 'เบอร์โทร'] }
+    { k: 'phone', th: 'Contact Phone Number', syn: ['contactphonenumber', 'contactphone', 'phonenumber', 'เบอร์โทร'] },
+    { k: 'team', th: 'ทีม (Contract Team) — ใช้ค้นหา ไม่แสดงในข้อความ', opt: true, syn: ['contractteam', 'team', 'ทีม', 'ชื่อทีม'] }
   ];
   let raw = [], hasHdr = false, map = {}, srcName = '', recs = [];
   const norm = s => String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9฀-๿]+/g, '');
@@ -2821,7 +2823,7 @@ const P4 = (() => {
       if (!row || !row.some(x => x !== '' && x != null)) return;
       const r = { n: recs.length + 1, rowNo: idx + (hasHdr ? 2 : 1), f: {}, warn: [] };
       FIELDS.forEach(f => { const c = cell(row, f.k); r.f[f.k] = c.v; if (c.note) r.warn.push(c.note); });
-      const miss = FIELDS.filter(f => !r.f[f.k]).map(f => f.th); if (miss.length) r.warn.unshift('ไม่มีข้อมูล: ' + miss.join(', '));
+      const miss = FIELDS.filter(f => !f.opt && !r.f[f.k]).map(f => f.th); if (miss.length) r.warn.unshift('ไม่มีข้อมูล: ' + miss.join(', '));
       ['lat', 'lon'].forEach(k => { if (r.f[k] && !isFinite(+r.f[k])) r.warn.push(k === 'lat' ? 'Latitude ไม่ใช่ตัวเลข' : 'Longitude ไม่ใช่ตัวเลข'); });
       r.t = text(r.f); recs.push(r);
     });
@@ -2832,7 +2834,12 @@ const P4 = (() => {
     else if (m === 'time') a.sort((x, y) => String(x.f.plan).localeCompare(String(y.f.plan)) || String(x.f.eng).localeCompare(String(y.f.eng), 'th'));
     return a;
   }
-  function visible() { const q = ($$('p4q').value || '').trim().toLowerCase(); return sorted().filter(r => !q || [r.f.acc, r.f.eng, r.f.cust].some(x => String(x).toLowerCase().includes(q))); }
+  const keyOf = x => String(x == null ? '' : x).toLowerCase().replace(/[\s.\-_]/g, '');
+  function visible() {
+    const nons = ($$('p4non').value || '').split(/[\s,;]+/).map(keyOf).filter(Boolean), tm = keyOf($$('p4team').value), q = ($$('p4q').value || '').trim().toLowerCase();
+    return sorted().filter(r => (!nons.length || nons.some(n => keyOf(r.f.acc).includes(n))) && (!tm || keyOf(r.f.team).includes(tm)) && (!q || [r.f.eng, r.f.cust].some(x => String(x).toLowerCase().includes(q))));
+  }
+  function teamList() { const t = [...new Set(recs.map(r => r.f.team).filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b), 'th')); $$('p4teams').innerHTML = t.map(x => '<option value="' + esc(x) + '">').join(''); }
   function renderMap() {
     const cols = Math.max.apply(null, raw.slice(0, 20).map(r => r.length).concat([0])), hdr = hasHdr ? raw[0] : [];
     const letter = i => { let s = '', n = i + 1; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; };
@@ -2843,12 +2850,12 @@ const P4 = (() => {
   function preview() { const show = raw.slice(0, hasHdr ? 4 : 3); $$('p4pv').innerHTML = '<table class="pv"><thead><tr><th>#</th>' + FIELDS.map(f => '<th>' + esc(f.th) + '</th>').join('') + '</tr></thead><tbody>' + show.map((r, ri) => (hasHdr && ri === 0) ? '' : '<tr><td>' + (ri + 1) + '</td>' + FIELDS.map(f => '<td>' + esc(cell(r, f.k).v) + '</td>').join('') + '</tr>').join('') + '</tbody></table>'; }
   function renderList() {
     const list = visible();
-    $$('p4count').textContent = recs.length ? recs.length + ' ใบงาน' + (srcName ? ' · ' + srcName : '') : '';
-    $$('p4out').hidden = !recs.length;
-    $$('p4list').innerHTML = list.map(r => '<div class="job"><header><b>#' + r.n + '</b><span class="muted">Access ' + esc(r.f.acc || '-') + ' · ' + esc(r.f.eng || 'ไม่มีชื่อช่าง') + '</span><span class="grow" style="flex:1"></span>' +
+    teamList(); $$('p4count').textContent = recs.length ? recs.length + ' ใบงาน' + (srcName ? ' · ' + srcName : '') : '';
+    $$('p4out').hidden = !recs.length; $$('p4copyAll').textContent = 'คัดลอกทั้งหมด (' + list.length + ' ใบงาน)';
+    $$('p4list').innerHTML = list.map(r => '<div class="job"><header><b>#' + r.n + '</b><span class="muted">Access ' + esc(r.f.acc || '-') + ' · ' + esc(r.f.eng || 'ไม่มีชื่อช่าง') + (r.f.team ? ' · ทีม ' + esc(r.f.team) : '') + '</span><span class="grow" style="flex:1"></span>' +
       (r.warn.length ? '<span class="pill warn" title="' + esc(r.warn.join('\n')) + '">⚠ ' + r.warn.length + ' ข้อควรตรวจ</span>' : '<span class="pill ok">✓ ข้อมูลครบ</span>') + '</header>' +
       (r.warn.length ? '<div class="banner warn" style="margin:10px 14px 0">' + r.warn.map(esc).join('<br>') + '</div>' : '') +
-      '<div class="col"><pre>' + esc(r.t) + '</pre><button class="btn small" data-p4="copy" data-n="' + r.n + '">คัดลอก</button></div></div>').join('') || (recs.length ? '<p class="muted">ไม่พบรายการตามคำค้น</p>' : '');
+      '<div class="col"><pre>' + esc(r.t) + '</pre><button class="btn small" data-p4="copy" data-n="' + r.n + '">คัดลอกใบงานนี้ (non ' + esc(r.f.acc || '-') + ')</button></div></div>').join('') || (recs.length ? '<p class="muted">ไม่พบรายการตามคำค้น</p>' : '');
   }
   function refresh() { build(); renderMap(); renderList(); }
   function setRaw(rows, name) {
@@ -2880,10 +2887,10 @@ const P4 = (() => {
     $$('p4pasteGo').addEventListener('click', () => { const t = $$('p4paste').value.replace(/\r/g, ''); const rows = t.split('\n').filter(l => l.trim()).map(l => l.split('\t')); if (!rows.length) { toast('ยังไม่ได้วางข้อมูล', 'err'); return; } setRaw(rows, 'ข้อมูลที่วาง'); });
     $$('p4hdr').addEventListener('change', e => { hasHdr = e.target.checked; refresh(); });
     $$('p4maps').addEventListener('change', e => { const k = e.target.dataset.p4map; if (!k) return; map[k] = +e.target.value; build(); preview(); renderList(); });
-    $$('p4q').addEventListener('input', renderList); $$('p4sort').addEventListener('change', renderList);
+    ['p4q', 'p4non', 'p4team'].forEach(id => $$(id).addEventListener('input', renderList)); $$('p4sort').addEventListener('change', renderList);
     $$('p4list').addEventListener('click', e => { const b = e.target.closest('[data-p4=copy]'); if (!b) return; const r = recs.find(x => x.n === +b.dataset.n); if (r) copy(r.t); });
     $$('p4copyAll').addEventListener('click', () => { const l = visible(); if (l.length) copy(l.map(r => r.t).join(SEP)); });
-    $$('p4xlsx').addEventListener('click', async () => { if (!recs.length) return; const blob = await buildXlsx([sheetOf('รายละเอียดงาน', ['#'].concat(FIELDS.map(f => f.th), ['ข้อควรตรวจ']), visible().map(r => [r.n].concat(FIELDS.map(f => r.f[f.k]), [r.warn.join(' | ')])), [6, 28, 16, 22, 50, 28, 12, 12, 24, 16, 40])]); await saveFile('soa-job-details.xlsx', blob); });
+    $$('p4xlsx').addEventListener('click', async () => { if (!recs.length) return; const blob = await buildXlsx([sheetOf('รายละเอียดงาน', ['#'].concat(FIELDS.map(f => f.opt ? 'ทีม' : f.th), ['ข้อควรตรวจ']), visible().map(r => [r.n].concat(FIELDS.map(f => r.f[f.k]), [r.warn.join(' | ')])), [6, 28, 16, 22, 50, 28, 12, 12, 24, 16, 18, 40])]); await saveFile('soa-job-details.xlsx', blob); });
   }
   return { init, _t: { text, get recs() { return recs; }, setRaw } };
 })();
