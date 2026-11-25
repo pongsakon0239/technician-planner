@@ -359,8 +359,9 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
 <g font-family="monospace" font-size="7.5" fill="var(--ink)"><rect x="8" y="28" width="88" height="15" rx="4" fill="color-mix(in srgb,#ec4899 12%,var(--panel))"/><text x="12" y="38">s1/88…/วังทอง</text><rect x="8" y="48" width="88" height="15" rx="4" fill="color-mix(in srgb,#ec4899 12%,var(--panel))"/><text x="12" y="58">s4/88…/บางนา OM</text></g>
 <g fill="var(--line-strong)"><rect x="8" y="71" width="56" height="4" rx="2"/><rect x="8" y="80" width="44" height="4" rx="2"/></g>
 <g transform="translate(76 68)"><rect x="3" y="0" width="14" height="16" rx="3" fill="none" stroke="#ec4899" stroke-width="1.6"/><rect x="0" y="4" width="14" height="16" rx="3" fill="var(--panel)" stroke="#ec4899" stroke-width="1.6"/></g></g></svg><span class="no">โปรแกรม 3</span><h2>อัปเดตแพลนงานช่าง / ติดตามปิดงาน</h2><p>เทียบเลข non ในแพลนกับไฟล์ Excel MA และ OM แล้วดึงเฉพาะงานใหม่ พร้อมบรรทัดแพลน ชื่อช่าง และทีม ให้คัดลอกไปใช้ต่อ พร้อมสรุปสถานะงานและติดตามงานที่เลยเวลา Slot แต่ยังไม่ปิดใบงาน</p><span class="go">เปิดโปรแกรม →</span></a>
+    <a class="pcard" href="#soa" style="--c:#0ea5e9"><svg class="art" viewBox="0 0 320 150" role="img" aria-label="ภาพประกอบ: ไฟล์ Excel ถูกแปลงเป็นรายละเอียดงาน 8 บรรทัด พร้อมปุ่มคัดลอก"><rect x="0.5" y="0.5" width="319" height="149" rx="12" fill="var(--empty-bg)" stroke="var(--line)"/><g transform="translate(18 32)"><rect width="76" height="86" rx="8" fill="var(--panel)" stroke="var(--line-strong)"/><rect width="76" height="16" rx="8" fill="#16a34a"/><rect y="8" width="76" height="8" fill="#16a34a"/><g stroke="var(--line-strong)"><line x1="0" y1="34" x2="76" y2="34"/><line x1="0" y1="52" x2="76" y2="52"/><line x1="0" y1="70" x2="76" y2="70"/><line x1="25" y1="16" x2="25" y2="86"/><line x1="50" y1="16" x2="50" y2="86"/></g></g><g stroke="#0ea5e9" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M104 75 H128"/><path d="M122 69 L128 75 L122 81"/></g><g transform="translate(138 14)"><rect width="164" height="122" rx="8" fill="var(--panel)" stroke="#0ea5e9"/><g fill="var(--line-strong)"><rect x="12" y="14" width="90" height="5" rx="2.5"/><rect x="12" y="28" width="116" height="5" rx="2.5"/><rect x="12" y="42" width="100" height="5" rx="2.5"/><rect x="12" y="56" width="124" height="5" rx="2.5"/><rect x="12" y="70" width="84" height="5" rx="2.5"/><rect x="12" y="84" width="108" height="5" rx="2.5"/><rect x="12" y="98" width="96" height="5" rx="2.5"/></g></g></svg><span class="no">โปรแกรม 4</span><h2>รายละเอียดงาน (กรณี SOA ล่ม)</h2><p>อัปโหลดไฟล์ใบงานแบบเดิม แล้วสร้างรายละเอียดงาน 8 หัวข้อ (ช่าง, Access Number, เวลานัด, ที่อยู่, Title, พิกัด, ชื่อลูกค้า, เบอร์โทร) พร้อมปุ่มคัดลอก</p><span class="go">เปิดโปรแกรม →</span></a>
   </div>
-  <p class="note">ข้อมูลของโปรแกรม 1 เก็บในเบราว์เซอร์เครื่องนี้ · โปรแกรม 2 และ 3 ไม่บันทึกข้อมูลลูกค้าไว้เลย (อยู่ในหน้าจอจนกว่าจะปิดหรือรีเฟรช) เก็บเฉพาะค่าที่ตั้งไว้ เช่น ชื่อทีมผู้ขอ</p>
+  <p class="note">ข้อมูลของโปรแกรม 1 เก็บในเบราว์เซอร์เครื่องนี้ · โปรแกรม 2, 3 และ 4 ไม่บันทึกข้อมูลลูกค้าไว้เลย (อยู่ในหน้าจอจนกว่าจะปิดหรือรีเฟรช) เก็บเฉพาะค่าที่ตั้งไว้ เช่น ชื่อทีมผู้ขอ</p>
 </div>
 
 <div id="p2" class="page p2" hidden>
@@ -419,6 +420,22 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
     <section class="panel"><h2>⑤ สถานะใบงาน FOA Reject</h2><div id="p3foa"></div></section>
     </div>
   </div>
+</div>
+
+<div id="p4" class="page p2 p4" hidden>
+  <div class="ptop"><a class="homebtn" href="#">← หน้าแรก</a><h1>รายละเอียดงาน (กรณี SOA ล่ม)</h1><span class="grow"></span><span class="muted" id="p4count"></span></div>
+  <section class="panel"><h2>① นำเข้าไฟล์ใบงาน (ไฟล์เดิมที่ใช้อยู่)</h2>
+    <div class="grid2">
+      <div><div class="drop" id="p4drop" tabindex="0" role="button">ลากไฟล์ Excel / CSV มาวางที่นี่ หรือคลิกเพื่อเลือกไฟล์ (.xlsx .xls .csv)</div><input type="file" id="p4file" hidden accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"></div>
+      <div><textarea id="p4paste" placeholder="หรือวางข้อมูลดิบที่คัดลอกจาก Excel (คั่นด้วย Tab) 1 บรรทัดต่อ 1 ใบงาน"></textarea><div class="tools" style="margin-top:6px"><button class="btn small" id="p4pasteGo">สร้างข้อความจากข้อมูลที่วาง</button></div></div>
+    </div>
+    <div id="p4fileinfo" class="muted" style="margin-top:8px"></div>
+    <p class="muted" style="margin:8px 0 0;font-size:12px">โปรแกรมนี้ไม่บันทึกข้อมูลลูกค้าไว้ในเครื่องหรือส่งออกไปที่ใด (อยู่ในหน้าจอจนกว่าจะปิดหรือรีเฟรช)</p>
+  </section>
+  <section class="panel" id="p4mapPanel" hidden><h2>② ตรวจสอบคอลัมน์ที่อ่านได้ <span class="muted" style="font-weight:400">(ปรับได้ถ้าไม่ตรง)</span></h2>
+    <label style="display:flex;gap:6px;align-items:center;margin-bottom:10px;font-size:13px"><input type="checkbox" id="p4hdr"> แถวแรกเป็นหัวตาราง (ไม่นับเป็นใบงาน)</label>
+    <div class="maps" id="p4maps"></div><div class="pvwrap" style="margin-top:12px" id="p4pv"></div></section>
+  <section id="p4out" hidden><div class="tools"><input type="search" id="p4q" placeholder="ค้นหา Access Number / ช่าง / ชื่อลูกค้า" style="min-width:240px;padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);color:var(--ink)"><label class="muted" style="font-size:13px">เรียงตาม <select id="p4sort"><option value="file">ลำดับในไฟล์</option><option value="eng">ชื่อช่าง</option><option value="time">เวลานัด</option></select></label><span class="grow" style="flex:1"></span><button class="btn small primary" id="p4copyAll">คัดลอกทั้งหมด</button><button class="btn small" id="p4xlsx">ส่งออก Excel</button></div><div id="p4list"></div></section>
 </div>
 
 <script>/*!
@@ -568,8 +585,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '31.10';
+const APP_VERSION = '32';
 const CHANGELOG = [
+  ['32', '2026-11-25', 'เพิ่มโปรแกรม 4: รายละเอียดงาน (กรณี SOA ล่ม) — อัปโหลดไฟล์ใบงานแบบเดิม สร้างข้อความ 8 หัวข้อ (Field Engineer, Access Number, Plan Arrival Time, Address, Title, Latitude/Longitude, Customer Name, Contact Phone Number) พร้อมคัดลอกรายใบ/ทั้งหมด และส่งออก Excel'],
   ['31.10', '2026-11-24', 'หน้าข้อมูลช่าง: เพิ่มปุ่มลบช่าง (กดสองขั้น ยืนยันก่อนลบ) — ถ้าช่างยังมีงานในแพลนจะไม่ให้ลบ'],
   ['31.9', '2026-11-24', 'หน้าข้อมูลช่าง: บันทึกอัตโนมัติทันทีที่พิมพ์ + ปุ่ม "บันทึกข้อมูลช่าง" แสดงเวลาที่บันทึก และขอให้เบราว์เซอร์เก็บข้อมูลถาวร'],
   ['31.8', '2026-11-24', 'โปรแกรม 1: จับคู่ชื่อช่างจากไฟล์แพลนเดิมแบบยืดหยุ่น (ชื่อไทยสะกดต่างกัน 1 ตัวอักษรยังจับคู่ได้ ถ้าตรงช่างคนเดียว) และแก้ชื่อช่างลำดับ 4 ที่ค้างในเครื่องเป็น ไพโรจน์ นิยมเดชา'],
@@ -2762,13 +2780,121 @@ const P3 = (() => {
   return { init, _t: { get res() { return res; }, SRC, extractNon, pdate } };
 })();
 
+/* ===== โปรแกรม 4: รายละเอียดงาน (กรณี SOA ล่ม) — แยกจากโปรแกรมอื่น ไม่บันทึกข้อมูลลูกค้า ===== */
+const P4 = (() => {
+  const $$ = id => document.getElementById(id);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const FIELDS = [ // ลำดับข้อความตามที่กำหนด: 1 Field Engineer … 8 Contact Phone Number
+    { k: 'eng', th: 'Field Engineer', syn: ['fieldengineer', 'fieldengineername', 'engineer', 'ชื่อช่าง', 'ช่าง'] },
+    { k: 'acc', th: 'Access Number', syn: ['accessnumber', 'accessno', 'internetno', 'internetnumber'] },
+    { k: 'plan', th: 'Plan Arrival Time', syn: ['planarrivaltime', 'planarrival', 'slot'] },
+    { k: 'addr', th: 'Address', syn: ['address', 'ที่อยู่', 'ที่อยู่ลูกค้า'] },
+    { k: 'title', th: 'Title', syn: ['title', 'symptom', 'producename', 'productname'] },
+    { k: 'lat', th: 'Latitude', syn: ['latitude', 'lat'] },
+    { k: 'lon', th: 'Longitude', syn: ['longitude', 'lon', 'long', 'lng'] },
+    { k: 'cust', th: 'Customer Name', syn: ['customername', 'ชื่อลูกค้า'] },
+    { k: 'phone', th: 'Contact Phone Number', syn: ['contactphonenumber', 'contactphone', 'phonenumber', 'เบอร์โทร'] }
+  ];
+  let raw = [], hasHdr = false, map = {}, srcName = '', recs = [];
+  const norm = s => String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9฀-๿]+/g, '');
+  function autoMap(rows) {
+    const hdr = (rows[0] || []).map(norm), m = {}; let hits = 0;
+    FIELDS.forEach(f => { let i = hdr.findIndex(x => x && f.syn.includes(x)); if (i < 0) i = hdr.findIndex(x => x && f.syn.some(sy => sy.length >= 6 && x.includes(sy))); if (i >= 0) { m[f.k] = i; hits++; } });
+    return { m, hits };
+  }
+  function serialToStr(v) { const ms = Math.round((v - 25569) * 86400) * 1000, d = new Date(ms), p = n => String(n).padStart(2, '0'); return d.getUTCFullYear() + '-' + p(d.getUTCMonth() + 1) + '-' + p(d.getUTCDate()) + ' ' + p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds()); }
+  function cell(row, k) {
+    const i = map[k]; if (i == null || i < 0) return { v: '', note: '' }; const v = row[i];
+    if (v == null || v === '') return { v: '', note: '' };
+    if (typeof v === 'number') {
+      if (k === 'plan' && v > 25569 && v < 90000) return { v: serialToStr(v), note: '' };
+      const s = String(v); if (k === 'phone' && /^\d{9}$/.test(s) && s[0] !== '0') return { v: s, note: 'เบอร์ ' + s + ' เป็นตัวเลขใน Excel เลข 0 ตัวหน้าอาจหาย' };
+      return { v: s, note: '' };
+    }
+    return { v: String(v).replace(/\s*[\r\n]+\s*/g, ' ').trim(), note: '' };
+  }
+  const text = f => ['Field Engineer : ' + f.eng, 'Access Number : ' + f.acc, 'Plan Arrival Time : ' + f.plan, 'Address : ' + f.addr, 'Title : ' + f.title,
+    'Latitude, Longitude : ' + (f.lat || f.lon ? f.lat + ', ' + f.lon : ''), 'Customer Name : ' + f.cust, 'Contact Phone Number : ' + f.phone].join('\n');
+  function build() {
+    const body = raw.slice(hasHdr ? 1 : 0); recs = [];
+    body.forEach((row, idx) => {
+      if (!row || !row.some(x => x !== '' && x != null)) return;
+      const r = { n: recs.length + 1, rowNo: idx + (hasHdr ? 2 : 1), f: {}, warn: [] };
+      FIELDS.forEach(f => { const c = cell(row, f.k); r.f[f.k] = c.v; if (c.note) r.warn.push(c.note); });
+      const miss = FIELDS.filter(f => !r.f[f.k]).map(f => f.th); if (miss.length) r.warn.unshift('ไม่มีข้อมูล: ' + miss.join(', '));
+      ['lat', 'lon'].forEach(k => { if (r.f[k] && !isFinite(+r.f[k])) r.warn.push(k === 'lat' ? 'Latitude ไม่ใช่ตัวเลข' : 'Longitude ไม่ใช่ตัวเลข'); });
+      r.t = text(r.f); recs.push(r);
+    });
+  }
+  function sorted() {
+    const m = $$('p4sort').value, a = recs.slice();
+    if (m === 'eng') a.sort((x, y) => String(x.f.eng).localeCompare(String(y.f.eng), 'th') || String(x.f.plan).localeCompare(String(y.f.plan)));
+    else if (m === 'time') a.sort((x, y) => String(x.f.plan).localeCompare(String(y.f.plan)) || String(x.f.eng).localeCompare(String(y.f.eng), 'th'));
+    return a;
+  }
+  function visible() { const q = ($$('p4q').value || '').trim().toLowerCase(); return sorted().filter(r => !q || [r.f.acc, r.f.eng, r.f.cust].some(x => String(x).toLowerCase().includes(q))); }
+  function renderMap() {
+    const cols = Math.max.apply(null, raw.slice(0, 20).map(r => r.length).concat([0])), hdr = hasHdr ? raw[0] : [];
+    const letter = i => { let s = '', n = i + 1; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; };
+    const opts = sel => '<option value="-1"' + (sel == null || sel < 0 ? ' selected' : '') + '>— ไม่ใช้ —</option>' + Array.from({ length: cols }, (_, i) => '<option value="' + i + '"' + (sel === i ? ' selected' : '') + '>คอลัมน์ ' + (i + 1) + ' (' + letter(i) + ')' + (hdr[i] ? ' · ' + esc(String(hdr[i]).slice(0, 24)) : '') + '</option>').join('');
+    $$('p4maps').innerHTML = FIELDS.map(f => '<label>' + esc(f.th) + '<select data-p4map="' + f.k + '">' + opts(map[f.k]) + '</select></label>').join('');
+    preview(); $$('p4mapPanel').hidden = false; $$('p4hdr').checked = hasHdr;
+  }
+  function preview() { const show = raw.slice(0, hasHdr ? 4 : 3); $$('p4pv').innerHTML = '<table class="pv"><thead><tr><th>#</th>' + FIELDS.map(f => '<th>' + esc(f.th) + '</th>').join('') + '</tr></thead><tbody>' + show.map((r, ri) => (hasHdr && ri === 0) ? '' : '<tr><td>' + (ri + 1) + '</td>' + FIELDS.map(f => '<td>' + esc(cell(r, f.k).v) + '</td>').join('') + '</tr>').join('') + '</tbody></table>'; }
+  function renderList() {
+    const list = visible();
+    $$('p4count').textContent = recs.length ? recs.length + ' ใบงาน' + (srcName ? ' · ' + srcName : '') : '';
+    $$('p4out').hidden = !recs.length;
+    $$('p4list').innerHTML = list.map(r => '<div class="job"><header><b>#' + r.n + '</b><span class="muted">Access ' + esc(r.f.acc || '-') + ' · ' + esc(r.f.eng || 'ไม่มีชื่อช่าง') + '</span><span class="grow" style="flex:1"></span>' +
+      (r.warn.length ? '<span class="pill warn" title="' + esc(r.warn.join('\n')) + '">⚠ ' + r.warn.length + ' ข้อควรตรวจ</span>' : '<span class="pill ok">✓ ข้อมูลครบ</span>') + '</header>' +
+      (r.warn.length ? '<div class="banner warn" style="margin:10px 14px 0">' + r.warn.map(esc).join('<br>') + '</div>' : '') +
+      '<div class="col"><pre>' + esc(r.t) + '</pre><button class="btn small" data-p4="copy" data-n="' + r.n + '">คัดลอก</button></div></div>').join('') || (recs.length ? '<p class="muted">ไม่พบรายการตามคำค้น</p>' : '');
+  }
+  function refresh() { build(); renderMap(); renderList(); }
+  function setRaw(rows, name) {
+    raw = rows.filter(r => r && r.length); srcName = name || ''; if (!raw.length) { toast('ไม่พบข้อมูลในไฟล์', 'err'); return; }
+    const a = autoMap(raw); hasHdr = a.hits >= 3; map = {};
+    FIELDS.forEach(f => { map[f.k] = (hasHdr && a.m[f.k] != null) ? a.m[f.k] : -1; });
+    refresh();
+    const found = FIELDS.filter(f => map[f.k] >= 0).length, lack = FIELDS.filter(f => map[f.k] < 0).map(f => f.th);
+    $$('p4fileinfo').textContent = 'อ่านแล้ว ' + recs.length + ' ใบงาน · ' + (hasHdr ? 'จับคู่คอลัมน์ตามหัวตารางได้ ' + found + ' จาก ' + FIELDS.length + ' ช่อง' : 'ไม่พบหัวตาราง — กรุณาเลือกคอลัมน์ในข้อ ② เอง') + (lack.length && hasHdr ? ' · ยังไม่ได้เลือก: ' + lack.join(', ') : '');
+  }
+  async function loadFile(f) {
+    if (!f) return;
+    try { const sheets = await readAnyFile(f); const sh = sheets.find(s => s.rows && s.rows.some(r => r && r.length)) || sheets[0]; setRaw(sh.rows.map(r => r || []), f.name + (sheets.length > 1 ? ' [' + sh.name + ']' : '')); }
+    catch (e) { toast('อ่านไฟล์ไม่ได้: ' + e.message, 'err'); }
+  }
+  async function copy(t) {
+    try { await navigator.clipboard.writeText(t); toast('คัดลอกแล้ว', 'ok'); return; } catch (e) {}
+    const ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove();
+    toast(ok ? 'คัดลอกแล้ว' : 'คัดลอกอัตโนมัติไม่ได้ กรุณาเลือกข้อความแล้วกด Ctrl+C', ok ? 'ok' : 'err');
+  }
+  const SEP = '\n\n' + '='.repeat(40) + '\n\n';
+  function init() {
+    $$('p4drop').addEventListener('click', () => $$('p4file').click());
+    $$('p4drop').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $$('p4file').click(); } });
+    $$('p4file').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; loadFile(f); });
+    ['dragover', 'dragenter'].forEach(ev => $$('p4drop').addEventListener(ev, e => { e.preventDefault(); $$('p4drop').classList.add('over'); }));
+    ['dragleave', 'drop'].forEach(ev => $$('p4drop').addEventListener(ev, e => { e.preventDefault(); $$('p4drop').classList.remove('over'); }));
+    $$('p4drop').addEventListener('drop', e => loadFile(e.dataTransfer.files[0]));
+    $$('p4pasteGo').addEventListener('click', () => { const t = $$('p4paste').value.replace(/\r/g, ''); const rows = t.split('\n').filter(l => l.trim()).map(l => l.split('\t')); if (!rows.length) { toast('ยังไม่ได้วางข้อมูล', 'err'); return; } setRaw(rows, 'ข้อมูลที่วาง'); });
+    $$('p4hdr').addEventListener('change', e => { hasHdr = e.target.checked; refresh(); });
+    $$('p4maps').addEventListener('change', e => { const k = e.target.dataset.p4map; if (!k) return; map[k] = +e.target.value; build(); preview(); renderList(); });
+    $$('p4q').addEventListener('input', renderList); $$('p4sort').addEventListener('change', renderList);
+    $$('p4list').addEventListener('click', e => { const b = e.target.closest('[data-p4=copy]'); if (!b) return; const r = recs.find(x => x.n === +b.dataset.n); if (r) copy(r.t); });
+    $$('p4copyAll').addEventListener('click', () => { const l = visible(); if (l.length) copy(l.map(r => r.t).join(SEP)); });
+    $$('p4xlsx').addEventListener('click', async () => { if (!recs.length) return; const blob = await buildXlsx([sheetOf('รายละเอียดงาน', ['#'].concat(FIELDS.map(f => f.th), ['ข้อควรตรวจ']), visible().map(r => [r.n].concat(FIELDS.map(f => r.f[f.k]), [r.warn.join(' | ')])), [6, 28, 16, 22, 50, 28, 12, 12, 24, 16, 40])]); await saveFile('soa-job-details.xlsx', blob); });
+  }
+  return { init, _t: { text, get recs() { return recs; }, setRaw } };
+})();
+
 /* ===== หน้าแรก / สลับโปรแกรมด้วย hash: (ว่าง)=หน้าแรก #planner=จัดแพลน #dispatch=ขอเปิดพื้นที่ ===== */
 let __hsh = null;
 function route(h) {
   const hsh = typeof h === 'string' ? h : (location.hash || '').replace('#', ''); __hsh = hsh;
-  const to = hsh === 'planner' ? 'p1' : hsh === 'dispatch' ? 'p2' : hsh === 'update' ? 'p3' : 'home';
-  ['home', 'p1', 'p2', 'p3'].forEach(id => { const el = document.getElementById(id); if (el) el.hidden = id !== to; });
-  document.title = to === 'p1' ? 'โปรแกรมจัดแพลนช่าง' : to === 'p2' ? 'เตรียมข้อมูลขอเปิดพื้นที่จ่ายงาน' : to === 'p3' ? 'อัปเดตแพลนงานช่าง / ติดตามปิดงาน' : 'ศูนย์รวมโปรแกรมงานช่าง';
+  const to = hsh === 'planner' ? 'p1' : hsh === 'dispatch' ? 'p2' : hsh === 'update' ? 'p3' : hsh === 'soa' ? 'p4' : 'home';
+  ['home', 'p1', 'p2', 'p3', 'p4'].forEach(id => { const el = document.getElementById(id); if (el) el.hidden = id !== to; });
+  document.title = to === 'p1' ? 'โปรแกรมจัดแพลนช่าง' : to === 'p2' ? 'เตรียมข้อมูลขอเปิดพื้นที่จ่ายงาน' : to === 'p3' ? 'อัปเดตแพลนงานช่าง / ติดตามปิดงาน' : to === 'p4' ? 'รายละเอียดงาน (กรณี SOA ล่ม)' : 'ศูนย์รวมโปรแกรมงานช่าง';
   if (to === 'p1' && typeof render === 'function') { try { render(); } catch (e) {} }
   window.scrollTo(0, 0);
 }
@@ -2776,7 +2902,7 @@ window.addEventListener('hashchange', route);
 // คลิกลิงก์ภายใน (#...) แล้วสลับหน้าทันทีด้วยสคริปต์ ไม่พึ่ง hashchange อย่างเดียว (กันกรณีเปิดในหน้าพรีวิว/iframe ที่บล็อกการเปลี่ยน hash)
 document.addEventListener('click', e => {
   const a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
-  const h = a.getAttribute('href').slice(1); if (h && !['planner', 'dispatch', 'update'].includes(h)) return;
+  const h = a.getAttribute('href').slice(1); if (h && !['planner', 'dispatch', 'update', 'soa'].includes(h)) return;
   e.preventDefault(); try { history.replaceState(null, '', h ? '#' + h : location.pathname + location.search); } catch (x) { try { location.hash = h; } catch (y) {} }
   route(h);
 });
@@ -2784,5 +2910,6 @@ document.addEventListener('click', e => {
 init();
 P2.init();
 P3.init();
+P4.init();
 route();
 </script>
