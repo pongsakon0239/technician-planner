@@ -435,7 +435,7 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
   <section class="panel" id="p4mapPanel" hidden><h2>② ตรวจสอบคอลัมน์ที่อ่านได้ <span class="muted" style="font-weight:400">(ปรับได้ถ้าไม่ตรง)</span></h2>
     <label style="display:flex;gap:6px;align-items:center;margin-bottom:10px;font-size:13px"><input type="checkbox" id="p4hdr"> แถวแรกเป็นหัวตาราง (ไม่นับเป็นใบงาน)</label>
     <div class="maps" id="p4maps"></div><div class="pvwrap" style="margin-top:12px" id="p4pv"></div></section>
-  <section id="p4out" hidden><div class="panel" style="border-left-color:var(--g-d)"><h2>ค้นหา / กรอง</h2><div class="tools"><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">ค้นหา non (Access Number) — ใส่หลายเลขได้ คั่นด้วยเว้นวรรค จุลภาค หรือขึ้นบรรทัดใหม่<textarea id="p4non" rows="2" placeholder="เช่น 8802524773 8800902904" style="min-width:300px;min-height:44px"></textarea></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">ค้นหาทีม<input type="search" id="p4team" list="p4teams" placeholder="พิมพ์หรือเลือกทีม" style="padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);color:var(--ink)"><datalist id="p4teams"></datalist></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">ค้นหาช่าง / ลูกค้า<input type="search" id="p4q" placeholder="ชื่อช่าง หรือ ชื่อลูกค้า" style="padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);color:var(--ink)"></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">เรียงตาม<select id="p4sort"><option value="file">ลำดับในไฟล์</option><option value="eng">ชื่อช่าง</option><option value="time">เวลานัด</option></select></label></div><div class="tools" style="margin-bottom:0"><button class="btn small primary" id="p4copyAll">คัดลอกทั้งหมด</button><button class="btn small" id="p4xlsx">ส่งออก Excel</button><span class="muted" style="font-size:12px">"คัดลอกทั้งหมด" คัดลอกเฉพาะใบงานที่แสดงอยู่ตามการค้นหา · แต่ละใบงานมีปุ่มคัดลอกของตัวเองในการ์ด</span></div></div><div id="p4list"></div></section>
+  <section id="p4out" hidden><div class="panel" style="border-left-color:var(--g-d)"><h2>ค้นหา / กรอง</h2><div class="tools"><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">ค้นหา non (Access Number) — ใส่หลายเลขได้ คั่นด้วยเว้นวรรค จุลภาค หรือขึ้นบรรทัดใหม่<textarea id="p4non" rows="2" placeholder="เช่น 8802524773 8800902904" style="min-width:300px;min-height:44px"></textarea></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">เลือกทีม (Contract Team)<select id="p4teamSel" style="min-width:200px"><option value="">ทุกทีม</option></select></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">หรือพิมพ์ค้นหาทีม<input type="search" id="p4team" list="p4teams" placeholder="พิมพ์หรือเลือกทีม" style="padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);color:var(--ink)"><datalist id="p4teams"></datalist></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">ค้นหาช่าง / ลูกค้า<input type="search" id="p4q" placeholder="ชื่อช่าง หรือ ชื่อลูกค้า" style="padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--panel);color:var(--ink)"></label><label class="muted" style="font-size:13px;display:flex;flex-direction:column;gap:3px">เรียงตาม<select id="p4sort"><option value="file">ลำดับในไฟล์</option><option value="eng">ชื่อช่าง</option><option value="time">เวลานัด</option></select></label></div><div class="tools" style="margin-bottom:0"><button class="btn small primary" id="p4copyAll">คัดลอกทั้งหมด</button><button class="btn small" id="p4xlsx">ส่งออก Excel</button><span class="muted" style="font-size:12px">"คัดลอกทั้งหมด" คัดลอกเฉพาะใบงานที่แสดงอยู่ตามการค้นหา · แต่ละใบงานมีปุ่มคัดลอกของตัวเองในการ์ด</span></div></div><div id="p4list"></div></section>
 </div>
 
 <script>/*!
@@ -585,8 +585,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '32.1';
+const APP_VERSION = '32.2';
 const CHANGELOG = [
+  ['32.2', '2026-11-25', 'โปรแกรม 4: เพิ่มดรอปดาวเลือกทีมจากคอลัมน์ Contract Team (แสดงจำนวนใบงานต่อทีม) เพื่อดึงเฉพาะทีมเดียว'],
   ['32.1', '2026-11-25', 'โปรแกรม 4: เพิ่มช่องค้นหา non (ใส่หลายเลขได้) และช่องค้นหาทีม (อ่านจากคอลัมน์ Contract Team) ปุ่มคัดลอกทั้งหมดคัดลอกเฉพาะที่แสดงตามการค้นหา และปุ่มคัดลอกรายใบงานระบุเลข non'],
   ['32', '2026-11-25', 'เพิ่มโปรแกรม 4: รายละเอียดงาน (กรณี SOA ล่ม) — อัปโหลดไฟล์ใบงานแบบเดิม สร้างข้อความ 8 หัวข้อ (Field Engineer, Access Number, Plan Arrival Time, Address, Title, Latitude/Longitude, Customer Name, Contact Phone Number) พร้อมคัดลอกรายใบ/ทั้งหมด และส่งออก Excel'],
   ['31.10', '2026-11-24', 'หน้าข้อมูลช่าง: เพิ่มปุ่มลบช่าง (กดสองขั้น ยืนยันก่อนลบ) — ถ้าช่างยังมีงานในแพลนจะไม่ให้ลบ'],
@@ -2836,10 +2837,15 @@ const P4 = (() => {
   }
   const keyOf = x => String(x == null ? '' : x).toLowerCase().replace(/[\s.\-_]/g, '');
   function visible() {
-    const nons = ($$('p4non').value || '').split(/[\s,;]+/).map(keyOf).filter(Boolean), tm = keyOf($$('p4team').value), q = ($$('p4q').value || '').trim().toLowerCase();
-    return sorted().filter(r => (!nons.length || nons.some(n => keyOf(r.f.acc).includes(n))) && (!tm || keyOf(r.f.team).includes(tm)) && (!q || [r.f.eng, r.f.cust].some(x => String(x).toLowerCase().includes(q))));
+    const nons = ($$('p4non').value || '').split(/[\s,;]+/).map(keyOf).filter(Boolean), tm = keyOf($$('p4team').value), ts = $$('p4teamSel').value, q = ($$('p4q').value || '').trim().toLowerCase();
+    return sorted().filter(r => (!nons.length || nons.some(n => keyOf(r.f.acc).includes(n))) && (!ts || (ts === '__none' ? !r.f.team : r.f.team === ts)) && (!tm || keyOf(r.f.team).includes(tm)) && (!q || [r.f.eng, r.f.cust].some(x => String(x).toLowerCase().includes(q))));
   }
-  function teamList() { const t = [...new Set(recs.map(r => r.f.team).filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b), 'th')); $$('p4teams').innerHTML = t.map(x => '<option value="' + esc(x) + '">').join(''); }
+  function teamList() {
+    const cnt = {}; recs.forEach(r => { if (r.f.team) cnt[r.f.team] = (cnt[r.f.team] || 0) + 1; });
+    const t = Object.keys(cnt).sort((a, b) => String(a).localeCompare(String(b), 'th')), sel = $$('p4teamSel'), cur = sel.value;
+    sel.innerHTML = '<option value="">ทุกทีม (' + recs.length + ')</option>' + t.map(x => '<option value="' + esc(x) + '"' + (x === cur ? ' selected' : '') + '>' + esc(x) + ' (' + cnt[x] + ')</option>').join('') + (recs.some(r => !r.f.team) ? '<option value="__none"' + (cur === '__none' ? ' selected' : '') + '>(ไม่มีทีม)</option>' : '');
+    $$('p4teams').innerHTML = t.map(x => '<option value="' + esc(x) + '">').join('');
+  }
   function renderMap() {
     const cols = Math.max.apply(null, raw.slice(0, 20).map(r => r.length).concat([0])), hdr = hasHdr ? raw[0] : [];
     const letter = i => { let s = '', n = i + 1; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; };
@@ -2859,7 +2865,7 @@ const P4 = (() => {
   }
   function refresh() { build(); renderMap(); renderList(); }
   function setRaw(rows, name) {
-    raw = rows.filter(r => r && r.length); srcName = name || ''; if (!raw.length) { toast('ไม่พบข้อมูลในไฟล์', 'err'); return; }
+    $$('p4teamSel').value = ''; raw = rows.filter(r => r && r.length); srcName = name || ''; if (!raw.length) { toast('ไม่พบข้อมูลในไฟล์', 'err'); return; }
     const a = autoMap(raw); hasHdr = a.hits >= 3; map = {};
     FIELDS.forEach(f => { map[f.k] = (hasHdr && a.m[f.k] != null) ? a.m[f.k] : -1; });
     refresh();
@@ -2887,7 +2893,7 @@ const P4 = (() => {
     $$('p4pasteGo').addEventListener('click', () => { const t = $$('p4paste').value.replace(/\r/g, ''); const rows = t.split('\n').filter(l => l.trim()).map(l => l.split('\t')); if (!rows.length) { toast('ยังไม่ได้วางข้อมูล', 'err'); return; } setRaw(rows, 'ข้อมูลที่วาง'); });
     $$('p4hdr').addEventListener('change', e => { hasHdr = e.target.checked; refresh(); });
     $$('p4maps').addEventListener('change', e => { const k = e.target.dataset.p4map; if (!k) return; map[k] = +e.target.value; build(); preview(); renderList(); });
-    ['p4q', 'p4non', 'p4team'].forEach(id => $$(id).addEventListener('input', renderList)); $$('p4sort').addEventListener('change', renderList);
+    ['p4q', 'p4non', 'p4team'].forEach(id => $$(id).addEventListener('input', renderList)); $$('p4teamSel').addEventListener('change', renderList); $$('p4sort').addEventListener('change', renderList);
     $$('p4list').addEventListener('click', e => { const b = e.target.closest('[data-p4=copy]'); if (!b) return; const r = recs.find(x => x.n === +b.dataset.n); if (r) copy(r.t); });
     $$('p4copyAll').addEventListener('click', () => { const l = visible(); if (l.length) copy(l.map(r => r.t).join(SEP)); });
     $$('p4xlsx').addEventListener('click', async () => { if (!recs.length) return; const blob = await buildXlsx([sheetOf('รายละเอียดงาน', ['#'].concat(FIELDS.map(f => f.opt ? 'ทีม' : f.th), ['ข้อควรตรวจ']), visible().map(r => [r.n].concat(FIELDS.map(f => r.f[f.k]), [r.warn.join(' | ')])), [6, 28, 16, 22, 50, 28, 12, 12, 24, 16, 18, 40])]); await saveFile('soa-job-details.xlsx', blob); });
