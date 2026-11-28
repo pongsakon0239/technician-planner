@@ -283,6 +283,8 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
 .p3 #p3tbl tr.copied td{background:color-mix(in srgb,#facc15 38%,var(--panel));box-shadow:inset 0 0 0 1px #eab308} .p3 #p3tbl tr.copied td:first-child{box-shadow:inset 4px 0 0 #eab308} .p3 #p3tbl tr.copied [data-p3cp]{font-weight:700} .p3 #p3cpLines.done{outline:2px solid #eab308}
 
 .lpd{border:1px solid var(--line);border-radius:10px;background:var(--panel);margin-top:10px;min-width:0} .lpd>summary{cursor:pointer;font-weight:700;padding:10px 14px;list-style:revert} .lpd[open]>summary{border-bottom:1px solid var(--line)} .lpd>.lpanel{border:0;margin:0}
+
+#coSummary .co-card.copied{background:color-mix(in srgb,#facc15 30%,var(--panel));border-color:#eab308;box-shadow:inset 5px 0 0 #eab308} #coSummary .co-card.changed{border-color:#f59e0b;box-shadow:inset 5px 0 0 #f59e0b} .co-flag{display:inline-flex}
 </style>
 <div id="p1" hidden>
 <header class="top">
@@ -589,8 +591,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '33.2';
+const APP_VERSION = '33.3';
 const CHANGELOG = [
+  ['33.3', '2026-11-28', 'โปรแกรม 1: สรุปบริษัทต้นทาง — ไฮไลต์การ์ดบริษัทที่คัดลอกแล้ว (จำไว้แม้รีเฟรช) ถ้ารายการเปลี่ยนหลังคัดลอกจะเตือนให้คัดลอกใหม่'],
   ['33.2', '2026-11-28', 'โปรแกรม 1: ข้อความคัดลอกของสรุปบริษัทต้นทางขึ้นต้นด้วย "งานที่ทีมกลางดึงมาวิ่งครับ" ตามด้วยชื่อบริษัท แล้วรายการ NON | วันเวลา'],
   ['33.1', '2026-11-28', 'โปรแกรม 1: สรุปรายการงานแจ้งบริษัทต้นทางอยู่ใต้ตารางแพลนทันที และพับ "งานที่ยังจัดไม่ได้" / "งานรอตรวจสอบข้อมูล" ไว้ก่อน กดหัวข้อเพื่อแสดง (จำสถานะเปิด/ปิด)'],
   ['33', '2026-11-28', 'โปรแกรม 1: เพิ่ม "สรุปรายการงานแจ้งบริษัทต้นทาง" แยกจากตารางแพลน — เฉพาะงานในแพลน จัดกลุ่มตามคอลัมน์ Contract Team ของไฟล์ดิบ แสดง NON + วันเวลางาน มีปุ่มคัดลอกแยกแต่ละบริษัท ซ่อนไว้จนกดยืนยันแพลน และอัปเดตตามแพลนล่าสุดทันที'],
@@ -1785,7 +1788,8 @@ function companyHtml(date) {
   let o = '<section class="panel" id="coSummary" style="margin-top:14px"><h2>สรุปรายการงานแจ้งบริษัทต้นทาง <span class="muted" style="font-weight:400">' + gs.reduce((n, x) => n + x.rows.length, 0) + ' งาน · ' + gs.length + ' บริษัท · ตรงกับแพลนล่าสุด</span></h2>';
   if (!gs.length) return o + '<p class="muted">ยังไม่มีงานในแพลนที่ยืนยัน</p></section>';
   o += '<p class="muted small">จัดกลุ่มตามคอลัมน์ Contract Team ในไฟล์ดิบ แสดงเฉพาะ NON กับวันเวลางาน — อัปเดตเองเมื่อมีการเพิ่ม/ลบ/แก้ไขงานในแพลน' + (gs.some(x => x.co === NO_CO) ? ' · งานที่ไม่มีข้อมูลทีมในไฟล์ (เช่น มาจากไฟล์แพลนเดิม) อยู่ในกลุ่ม "' + NO_CO + '"' : '') + '</p>';
-  o += gs.map((x, i) => '<div class="job" style="margin-top:10px"><header><b>' + h(x.co) + '</b><span class="muted">' + x.rows.length + ' งาน</span><span class="grow" style="flex:1"></span><button class="btn small primary" data-act="copyCo" data-i="' + i + '">คัดลอก</button></header><div class="col"><pre>' + h(x.text) + '</pre></div></div>').join('');
+  const cc = ((S.coCopied || {})[date]) || {};
+  o += gs.map((x, i) => { const st = cc[x.co] === undefined ? 'none' : cc[x.co] === x.text ? 'done' : 'changed'; return '<div class="job co-card' + (st === 'done' ? ' copied' : st === 'changed' ? ' changed' : '') + '" data-co="' + i + '" style="margin-top:10px"><header><b>' + h(x.co) + '</b><span class="muted">' + x.rows.length + ' งาน</span><span class="co-flag">' + (st === 'done' ? '<span class="pill ok">✓ คัดลอกแล้ว</span>' : st === 'changed' ? '<span class="pill warn">⚠ รายการเปลี่ยนหลังคัดลอก — คัดลอกใหม่</span>' : '') + '</span><span class="grow" style="flex:1"></span><button class="btn small primary" data-act="copyCo" data-i="' + i + '">' + (st === 'done' ? '✓ คัดลอกอีกครั้ง' : 'คัดลอก') + '</button></header><div class="col"><pre>' + h(x.text) + '</pre></div></div>'; }).join('');
   return o + '</section>';
 }
 function viewPlan(a) {
@@ -2275,9 +2279,10 @@ const ACT = {
   askBtn: t => { const f = window._askFns[+t.dataset.i]; if (f) f(); },
   copyCo: async t => {
     const gs = companyGroups(curDate()); const x = gs && gs[+t.dataset.i]; if (!x) return;
-    try { await navigator.clipboard.writeText(x.text); toast('คัดลอกรายการของ ' + x.co + ' แล้ว', 'ok'); return; } catch (e) {}
+    const mark = () => { const d = curDate(); S.coCopied = S.coCopied || {}; (S.coCopied[d] = S.coCopied[d] || {})[x.co] = x.text; save(); const card = document.querySelector('.co-card[data-co="' + t.dataset.i + '"]'); if (card) { card.classList.add('copied'); card.classList.remove('changed'); const f = card.querySelector('.co-flag'); if (f) f.innerHTML = '<span class="pill ok">✓ คัดลอกแล้ว</span>'; t.textContent = '✓ คัดลอกอีกครั้ง'; } };
+    try { await navigator.clipboard.writeText(x.text); mark(); toast('คัดลอกรายการของ ' + x.co + ' แล้ว', 'ok'); return; } catch (e) {}
     const ta = document.createElement('textarea'); ta.value = x.text; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove();
-    toast(ok ? 'คัดลอกรายการของ ' + x.co + ' แล้ว' : 'คัดลอกอัตโนมัติไม่ได้ กรุณาเลือกข้อความแล้วกด Ctrl+C', ok ? 'ok' : 'err');
+    if (ok) mark(); toast(ok ? 'คัดลอกรายการของ ' + x.co + ' แล้ว' : 'คัดลอกอัตโนมัติไม่ได้ กรุณาเลือกข้อความแล้วกด Ctrl+C', ok ? 'ok' : 'err');
   },
   tab: t => { tab = t.dataset.tab; render(); },
   pickFile: () => $('fileIn').click(),
@@ -2416,7 +2421,7 @@ async function init() {
   $('btnUndo').addEventListener('click', () => { const s = undo(); if (s) { render(); toast('ย้อนกลับ: ' + s.label, 'ok'); } });
   $('btnWipe').addEventListener('click', () => {
     const nj = Object.keys(S.jobs).length, np = Object.keys(S.plans).length;
-    ask('ลบข้อมูลทั้งหมด?', '<p>จะลบ <b>ใบงาน ' + nj + ' รายการ</b> แพลน ' + np + ' วัน ไฟล์ที่นำเข้า ประวัติการเปลี่ยนแปลง และการเลือกจุดเริ่มงาน ออกจากเบราว์เซอร์นี้ ย้อนกลับไม่ได้</p><p class="muted small">ข้อมูลช่าง (ชื่อ เขตเริ่มงาน) วันหยุด และการตั้งค่า <b>ยังอยู่</b> ถ้าอยากลบทุกอย่างรวมข้อมูลช่าง ให้ลบข้อมูลของเว็บไซต์ในเบราว์เซอร์ แนะนำให้สำรองข้อมูลก่อน</p>', [{ label: 'ลบข้อมูลทั้งหมด', cls: 'danger', fn: () => { S.jobs = {}; S.uploads = []; S.changes = []; S.plans = {}; S.startPick = {}; S.road = {}; S.selectedDate = null; S.nextUp = 1; undoStack.length = 0; save(); closeModal(); render(); toast('ลบใบงานและแพลนทั้งหมดแล้ว', 'ok'); } }, { label: 'ไม่ลบ', fn: closeModal }]);
+    ask('ลบข้อมูลทั้งหมด?', '<p>จะลบ <b>ใบงาน ' + nj + ' รายการ</b> แพลน ' + np + ' วัน ไฟล์ที่นำเข้า ประวัติการเปลี่ยนแปลง และการเลือกจุดเริ่มงาน ออกจากเบราว์เซอร์นี้ ย้อนกลับไม่ได้</p><p class="muted small">ข้อมูลช่าง (ชื่อ เขตเริ่มงาน) วันหยุด และการตั้งค่า <b>ยังอยู่</b> ถ้าอยากลบทุกอย่างรวมข้อมูลช่าง ให้ลบข้อมูลของเว็บไซต์ในเบราว์เซอร์ แนะนำให้สำรองข้อมูลก่อน</p>', [{ label: 'ลบข้อมูลทั้งหมด', cls: 'danger', fn: () => { S.jobs = {}; S.uploads = []; S.changes = []; S.plans = {}; S.coCopied = {}; S.startPick = {}; S.road = {}; S.selectedDate = null; S.nextUp = 1; undoStack.length = 0; save(); closeModal(); render(); toast('ลบใบงานและแพลนทั้งหมดแล้ว', 'ok'); } }, { label: 'ไม่ลบ', fn: closeModal }]);
   });
   document.addEventListener('dragover', e => { if (e.target.id === 'dz' || (e.target.closest && e.target.closest('#dz'))) e.preventDefault(); });
   if (!S.selectedDate) { const ds = allDates(); S.selectedDate = ds.length ? ds[ds.length - 1].date : null; }
