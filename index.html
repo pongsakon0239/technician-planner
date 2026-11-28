@@ -281,6 +281,8 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #p3newPanel.hasnew{background:linear-gradient(135deg,#3a2210,#4a2a10)} :root:not([data-theme="light"]) #p3newPanel.hasnew h2{color:#fdba74}}
 
 .p3 #p3tbl tr.copied td{background:color-mix(in srgb,#facc15 38%,var(--panel));box-shadow:inset 0 0 0 1px #eab308} .p3 #p3tbl tr.copied td:first-child{box-shadow:inset 4px 0 0 #eab308} .p3 #p3tbl tr.copied [data-p3cp]{font-weight:700} .p3 #p3cpLines.done{outline:2px solid #eab308}
+
+.lpd{border:1px solid var(--line);border-radius:10px;background:var(--panel);margin-top:10px;min-width:0} .lpd>summary{cursor:pointer;font-weight:700;padding:10px 14px;list-style:revert} .lpd[open]>summary{border-bottom:1px solid var(--line)} .lpd>.lpanel{border:0;margin:0}
 </style>
 <div id="p1" hidden>
 <header class="top">
@@ -587,8 +589,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '33';
+const APP_VERSION = '33.1';
 const CHANGELOG = [
+  ['33.1', '2026-11-28', 'โปรแกรม 1: สรุปรายการงานแจ้งบริษัทต้นทางอยู่ใต้ตารางแพลนทันที และพับ "งานที่ยังจัดไม่ได้" / "งานรอตรวจสอบข้อมูล" ไว้ก่อน กดหัวข้อเพื่อแสดง (จำสถานะเปิด/ปิด)'],
   ['33', '2026-11-28', 'โปรแกรม 1: เพิ่ม "สรุปรายการงานแจ้งบริษัทต้นทาง" แยกจากตารางแพลน — เฉพาะงานในแพลน จัดกลุ่มตามคอลัมน์ Contract Team ของไฟล์ดิบ แสดง NON + วันเวลางาน มีปุ่มคัดลอกแยกแต่ละบริษัท ซ่อนไว้จนกดยืนยันแพลน และอัปเดตตามแพลนล่าสุดทันที'],
   ['32.6', '2026-11-28', 'โปรแกรม 1: ย้ายปุ่ม "ลบข้อมูลทั้งหมด" ไปไว้แถบบนสุดแทนปุ่ม "ยกเลิกแพลน" (ที่ไม่เคลียร์งาน) — ลบใบงาน แพลน ไฟล์ที่นำเข้า ประวัติ แต่เก็บข้อมูลช่างและการตั้งค่าไว้ ถอดปุ่มลบออกจากหน้าตั้งค่า'],
   ['32.5', '2026-11-25', 'โปรแกรม 3: งานใหม่ที่ไม่มีในแพลน — เอาปุ่ม "คัดลอกบรรทัดแพลนทั้งหมด" ออก (ซ้ำกับปุ่ม "คัดลอกทั้งหมด" ที่หัวตาราง)'],
@@ -1799,8 +1802,8 @@ function viewPlan(a) {
   if (a.excluded.length) out += '<details class="exc"><summary>ไม่นำมาจัด ' + a.excluded.length + ' ใบ (นอกพื้นที่ ' + h((S.settings.excludeProvs || []).join(', ')) + ' / งานทีมใหญ่ / แพ็กเกจที่คัดออก) ไม่นับรวม</summary><p class="small muted">' + a.excluded.map(j => h(j.access + ' ' + (j.timeStr || '') + ' [' + excludeReason(j) + ']')).join(' · ') + '</p></details>';
   out += '<p class="proc muted">สถานะการประมวลผล: ' + (lr ? 'จัดอัตโนมัติล่าสุด ' + fmtTs(lr.ts).slice(11) + ' ใช้เวลา ' + lr.ms + ' มิลลิวินาที · พิจารณา ' + lr.cands + ' หน่วยงาน จัดได้ ' + lr.assigned + ' ไม่ได้ ' + lr.unassigned + (lr.frozen ? ' (แพลนยืนยันแล้ว จึงคำนวณเป็นข้อเสนอเท่านั้น)' : '') + (lr.why ? ' · เหตุ: ' + h(lr.why) : '') : 'ยังไม่เคยจัดอัตโนมัติ') + ' · ระยะ "ห่าง" เป็นเส้นตรง (ไม่ใช่ถนน) · เวลาเดินทางเป็นค่าประมาณ ยกเว้นเส้นทางที่มี 🚗 (ค่าจริงจาก Google ไม่รวมรถติด)</p>';
   out += tableHtml(a);
-  out += '<div class="two">' + listPanel(a, 'unassigned') + listPanel(a, 'review') + '</div>';
   out += companyHtml(a.date);
+  out += '<div class="two">' + lpWrap(a, 'unassigned') + lpWrap(a, 'review') + '</div>';
   return out;
 }
 function banners(a) {
@@ -1874,6 +1877,12 @@ function listPanel(a, kind) {
   const L = (kind === 'unassigned' ? a.unassigned : a.review).filter(matchSearch).slice().sort((x, y) => (!!y.removedByUser) - (!!x.removedByUser));
   return '<section class="lpanel" data-drop="' + kind + '"><h3>' + (kind === 'unassigned' ? '✖ งานที่ยังจัดไม่ได้' : '⚠ งานรอตรวจสอบข้อมูล') + ' <span class="cnt">' + L.length + '</span></h3>' + (L.length ? L.map(u => unitCard(u, kind, a)).join('') : '<p class="muted">ไม่มีรายการ' + (kind === 'unassigned' ? ' (งานที่ผ่านข้อมูลครบถูกจัดหมดแล้ว)' : '') + '</p>') + '<p class="muted small">ลากการ์ดไปวางที่ช่อง Slot ของช่าง หรือวางการ์ดจากตารางมาที่นี่เพื่อนำออกจากแพลน</p></section>';
 }
+const lpOpen = { unassigned: false, review: false };
+function lpWrap(a, kind) { // พับเก็บไว้ก่อน กดหัวข้อเพื่อแสดงรายการ (จำสถานะเปิด/ปิดไว้ตอนวาดหน้าใหม่)
+  const n = (kind === 'unassigned' ? a.unassigned : a.review).length;
+  return '<details class="lpd" data-lp="' + kind + '"' + (lpOpen[kind] ? ' open' : '') + '><summary>' + (kind === 'unassigned' ? '✖ งานที่ยังจัดไม่ได้' : '⚠ งานรอตรวจสอบข้อมูล') + ' <span class="cnt">' + n + '</span> <span class="muted small">' + (n ? '— กดเพื่อแสดง/ซ่อนรายการ' : '— ไม่มีรายการ') + '</span></summary>' + listPanel(a, kind) + '</details>';
+}
+document.addEventListener('toggle', e => { const d = e.target; if (d && d.dataset && d.dataset.lp) lpOpen[d.dataset.lp] = d.open; }, true);
 function viewList(a, kind) {
   if (!a) return emptyState();
   const L = kind === 'unassigned' ? a.unassigned : a.review;
