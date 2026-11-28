@@ -304,7 +304,7 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
     <button class="btn" id="btnUndo">↶ ย้อนกลับ</button>
     <button class="btn" id="btnExport">ส่งออก Excel</button>
     <span class="grow"></span>
-    <button class="btn quiet" id="btnCancelPlan">ยกเลิกแพลน</button>
+    <button class="btn danger" id="btnWipe" title="ลบใบงานทั้งหมดและแพลนทั้งหมด (เก็บข้อมูลช่างและการตั้งค่าไว้)">🗑 ลบข้อมูลทั้งหมด</button>
     <button class="btn primary" id="btnConfirm">ยืนยันแพลน</button>
   </div>
 </header>
@@ -587,8 +587,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '32.5';
+const APP_VERSION = '32.6';
 const CHANGELOG = [
+  ['32.6', '2026-11-28', 'โปรแกรม 1: ย้ายปุ่ม "ลบข้อมูลทั้งหมด" ไปไว้แถบบนสุดแทนปุ่ม "ยกเลิกแพลน" (ที่ไม่เคลียร์งาน) — ลบใบงาน แพลน ไฟล์ที่นำเข้า ประวัติ แต่เก็บข้อมูลช่างและการตั้งค่าไว้ ถอดปุ่มลบออกจากหน้าตั้งค่า'],
   ['32.5', '2026-11-25', 'โปรแกรม 3: งานใหม่ที่ไม่มีในแพลน — เอาปุ่ม "คัดลอกบรรทัดแพลนทั้งหมด" ออก (ซ้ำกับปุ่ม "คัดลอกทั้งหมด" ที่หัวตาราง)'],
   ['32.4', '2026-11-25', 'โปรแกรม 3: งานใหม่ที่ไม่มีในแพลน — ไฮไลต์สีเหลืองที่แถวที่เพิ่งคัดลอก (ปุ่มเปลี่ยนเป็น "✓ คัดลอกแล้ว") คัดลอก non อื่นไฮไลต์จะย้ายตาม คัดลอกทั้งหมดไฮไลต์ทุกแถว'],
   ['32.3', '2026-11-25', 'โปรแกรม 3: กล่อง "งานใหม่ที่ไม่มีในแพลน" เพิ่มปุ่ม "คัดลอกทั้งหมด" ที่หัวคอลัมน์ข้างปุ่มรายแถว และแสดงจำนวนงานบนปุ่มด้านบน'],
@@ -1930,7 +1931,7 @@ function viewSettings() {
   o += '<section><h2>ชื่อเรียกเขตเพิ่มเติม (Mapping)</h2><p class="muted">ระบบรู้จักเขตกรุงเทพฯ 50 เขต และอำเภอในปทุมธานี สมุทรปราการ นนทบุรี ทั้งภาษาไทยและอังกฤษ (ต้องมีคำว่า Khet/Amphoe/Mueang นำหน้าจึงจะรับภาษาอังกฤษ) เพิ่มคำที่พบบ่อยของคุณได้ที่นี่ คำที่ปรากฏในที่อยู่จะถูกแปลงเป็นเขตที่กำหนด</p><div class="row"><input id="alAlias" placeholder="คำในที่อยู่ เช่น หมู่บ้านXXX"><input id="alDist" list="zoneList2" placeholder="เขต/อำเภอ"><datalist id="zoneList2">' + Object.keys(DISTRICTS).map(n => '<option value="' + h(n) + '">').join('') + '</datalist><button class="btn" data-act="addAlias">เพิ่ม</button></div>' + (S.aliases.length ? '<ul class="chiplist">' + S.aliases.map((a, i) => '<li>' + h(a.alias) + ' → ' + h(a.district) + ' <button class="btn tiny" data-act="rmAlias" data-i="' + i + '">ลบ</button></li>').join('') + '</ul>' : '') + '<details><summary>รายการเขตที่ระบบรู้จัก (' + Object.keys(DISTRICTS).length + ')</summary><p class="small muted">พิกัดศูนย์กลางเขตเป็นค่าอ้างอิงโดยประมาณ ใช้ประกอบการเทียบเขตเริ่มงานของช่างกับเขตลูกค้าเท่านั้น</p><div class="tscroll"><table class="data"><thead><tr><th>เขต/อำเภอ</th><th>จังหวัด</th><th>ชื่ออังกฤษ</th></tr></thead><tbody>' + Object.values(DISTRICTS).map(d => '<tr><td>' + h(d.name) + '</td><td>' + h(d.prov) + '</td><td>' + h(d.en.join(' / ')) + '</td></tr>').join('') + '</tbody></table></div></details></section>';
   o += '<section><h2>เวอร์ชันโปรแกรม: v' + APP_VERSION + '</h2><p class="muted">แก้เล็กน้อย (เพิ่ม Title / แพ็กเกจ / คำไฮไลต์) นับเป็น 24.1, 24.2 … ส่วนแก้หลายหัวข้อใหญ่จะขึ้นเลขถัดไป (25)</p><ul>' + CHANGELOG.map(c => '<li><b>v' + h(c[0]) + '</b> · ' + h(c[1]) + ' — ' + h(c[2]) + '</li>').join('') + '</ul></section>';
   o += '<section><h2>Google Maps (ระยะถนนจริง)</h2><p class="muted">ใส่ API Key ของคุณเอง (เปิดใช้ <b>Routes API</b> ใน Google Cloud) · คีย์เก็บในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่ถูกบันทึกในไฟล์สำรอง · ตอนกดคำนวณ จะส่งไป Google <b>เฉพาะพิกัด (ละติจูด/ลองจิจูด) ของจุดต้นทาง–ปลายทาง</b> ไม่ส่งชื่อ เบอร์โทร ที่อยู่ หรือเลขใบงาน · ควรจำกัดคีย์ให้ใช้ได้เฉพาะ Routes API · <b>ปุ่มคำนวณใช้ได้เมื่อเปิดจากไฟล์ .html ในเครื่อง</b> ถ้าเปิดผ่านลิงก์ในแอป Claude จะเรียก Google ไม่ได้ (ถูกบล็อก)</p><div class="row"><label>API Key <input type="password" id="gkey" data-chg="gmapsKey" autocomplete="off" value="' + h(s.gmapsKey || '') + '" style="width:min(420px,100%)"></label></div></section>';
-  o += '<section><h2>ที่เก็บข้อมูล และการสำรอง</h2><p>ข้อมูลใบงาน แพลน ช่าง และประวัติ <b>เก็บในเบราว์เซอร์ของเครื่องนี้ (IndexedDB)</b> ไม่ส่งออกไปเซิร์ฟเวอร์ใด ๆ หากเปลี่ยนเครื่อง ใช้โปรไฟล์เบราว์เซอร์อื่น หรือล้างข้อมูลเว็บไซต์ ข้อมูลเดิมจะไม่ปรากฏ ' + (memStore.ok ? '' : '<b class="bad">ตอนนี้บันทึกถาวรไม่ได้: ' + h(memStore.warn) + '</b>') + ' ไฟล์ลูกค้าไม่ถูกส่งให้บริการภายนอก (ยกเว้นการอ่านไฟล์ .xls รุ่นเก่า ซึ่งจะโหลดไลบรารีจาก cdnjs โดยไม่ส่งข้อมูลของคุณ) ไม่มีการใช้ API Key</p><div class="row"><button class="btn primary" data-act="backup">สำรองข้อมูล (ไฟล์ .json)</button><button class="btn" data-act="restorePick">กู้คืนจากไฟล์สำรอง</button><button class="btn danger" data-act="resetAll">ลบข้อมูลทั้งหมด</button></div><p class="muted small">แนะนำให้สำรองทุกครั้งหลังยืนยันแพลน ไฟล์สำรองมีข้อมูลลูกค้า โปรดเก็บอย่างปลอดภัย</p></section>';
+  o += '<section><h2>ที่เก็บข้อมูล และการสำรอง</h2><p>ข้อมูลใบงาน แพลน ช่าง และประวัติ <b>เก็บในเบราว์เซอร์ของเครื่องนี้ (IndexedDB)</b> ไม่ส่งออกไปเซิร์ฟเวอร์ใด ๆ หากเปลี่ยนเครื่อง ใช้โปรไฟล์เบราว์เซอร์อื่น หรือล้างข้อมูลเว็บไซต์ ข้อมูลเดิมจะไม่ปรากฏ ' + (memStore.ok ? '' : '<b class="bad">ตอนนี้บันทึกถาวรไม่ได้: ' + h(memStore.warn) + '</b>') + ' ไฟล์ลูกค้าไม่ถูกส่งให้บริการภายนอก (ยกเว้นการอ่านไฟล์ .xls รุ่นเก่า ซึ่งจะโหลดไลบรารีจาก cdnjs โดยไม่ส่งข้อมูลของคุณ) ไม่มีการใช้ API Key</p><div class="row"><button class="btn primary" data-act="backup">สำรองข้อมูล (ไฟล์ .json)</button><button class="btn" data-act="restorePick">กู้คืนจากไฟล์สำรอง</button></div><p class="muted small">แนะนำให้สำรองทุกครั้งหลังยืนยันแพลน ไฟล์สำรองมีข้อมูลลูกค้า โปรดเก็บอย่างปลอดภัย</p></section>';
   return o;
 }
 
@@ -2372,7 +2373,10 @@ async function init() {
   });
   $('btnExport').addEventListener('click', () => exportExcel().catch(e => toast('ส่งออกไม่สำเร็จ: ' + e.message, 'err')));
   $('btnUndo').addEventListener('click', () => { const s = undo(); if (s) { render(); toast('ย้อนกลับ: ' + s.label, 'ok'); } });
-  $('btnCancelPlan').addEventListener('click', () => { const d = curDate(); if (!d || !jobsOn(d).length) return; ask('ยกเลิกแพลนวันที่ ' + fmtDateTH(d) + ' ?', '<p>สถานะแพลนจะเป็น Cancelled และไม่มีการจัดงานเพิ่ม เปิดกลับเป็นร่างได้ภายหลัง</p>', [{ label: 'ยกเลิกแพลน', cls: 'danger', fn: () => { cancelPlan(d); closeModal(); render(); } }, { label: 'ไม่ทำ', fn: closeModal }]); });
+  $('btnWipe').addEventListener('click', () => {
+    const nj = Object.keys(S.jobs).length, np = Object.keys(S.plans).length;
+    ask('ลบข้อมูลทั้งหมด?', '<p>จะลบ <b>ใบงาน ' + nj + ' รายการ</b> แพลน ' + np + ' วัน ไฟล์ที่นำเข้า ประวัติการเปลี่ยนแปลง และการเลือกจุดเริ่มงาน ออกจากเบราว์เซอร์นี้ ย้อนกลับไม่ได้</p><p class="muted small">ข้อมูลช่าง (ชื่อ เขตเริ่มงาน) วันหยุด และการตั้งค่า <b>ยังอยู่</b> ถ้าอยากลบทุกอย่างรวมข้อมูลช่าง ให้ลบข้อมูลของเว็บไซต์ในเบราว์เซอร์ แนะนำให้สำรองข้อมูลก่อน</p>', [{ label: 'ลบข้อมูลทั้งหมด', cls: 'danger', fn: () => { S.jobs = {}; S.uploads = []; S.changes = []; S.plans = {}; S.startPick = {}; S.road = {}; S.selectedDate = null; S.nextUp = 1; undoStack.length = 0; save(); closeModal(); render(); toast('ลบใบงานและแพลนทั้งหมดแล้ว', 'ok'); } }, { label: 'ไม่ลบ', fn: closeModal }]);
+  });
   document.addEventListener('dragover', e => { if (e.target.id === 'dz' || (e.target.closest && e.target.closest('#dz'))) e.preventDefault(); });
   if (!S.selectedDate) { const ds = allDates(); S.selectedDate = ds.length ? ds[ds.length - 1].date : null; }
   if (S.selectedDate && jobsOn(S.selectedDate).length && !S.plans[S.selectedDate]) replan(S.selectedDate, 'เปิดโปรแกรม');
