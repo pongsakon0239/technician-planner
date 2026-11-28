@@ -285,6 +285,9 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
 .lpd{border:1px solid var(--line);border-radius:10px;background:var(--panel);margin-top:10px;min-width:0} .lpd>summary{cursor:pointer;font-weight:700;padding:10px 14px;list-style:revert} .lpd[open]>summary{border-bottom:1px solid var(--line)} .lpd>.lpanel{border:0;margin:0}
 
 #coSummary .co-card.copied{background:color-mix(in srgb,#facc15 30%,var(--panel));border-color:#eab308;box-shadow:inset 5px 0 0 #eab308} #coSummary .co-card.changed{border-color:#f59e0b;box-shadow:inset 5px 0 0 #f59e0b} .co-flag{display:inline-flex}
+
+.totop{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:90;width:48px;height:48px;border-radius:50%;border:1px solid var(--line-strong);background:var(--panel);color:var(--ink);font-size:24px;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;padding:0}
+.totop:hover{background:var(--ink);color:var(--panel)} .totop:focus-visible{outline:3px solid #2563eb;outline-offset:2px} .totop[hidden]{display:none}
 </style>
 <div id="p1" hidden>
 <header class="top">
@@ -320,6 +323,8 @@ table.plan tbody tr:nth-child(8n+1) th.c-name{box-shadow:inset 5px 0 0 var(--s1)
 <input type="file" id="fileIn" hidden accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
 <input type="file" id="fileInPlan" hidden accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
 <input type="file" id="restoreIn" hidden accept=".json,application/json">
+
+<button type="button" id="toTop" class="totop" aria-label="เลื่อนกลับขึ้นบนสุด" title="กลับขึ้นบนสุด" hidden>↑</button>
 
 <div id="home" class="page home" hidden>
   <h1>ศูนย์รวมโปรแกรมงานช่าง</h1>
@@ -591,8 +596,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '33.6';
+const APP_VERSION = '33.7';
 const CHANGELOG = [
+  ['33.7', '2026-11-28', 'ทุกโปรแกรม: เพิ่มปุ่มลูกศร ↑ ลอยมุมขวาล่าง กดแล้วเลื่อนกลับขึ้นบนสุด (โผล่เมื่อเลื่อนลงมา)'],
   ['33.6', '2026-11-28', 'โปรแกรม 1: ชื่อทีมในสรุปบริษัทต้นทาง เก็บทุกอย่างหลัง " - " จนถึงตัวสุดท้าย (รวม (BKK)_รหัส_FTB,PLB)'],
   ['33.5', '2026-11-28', 'โปรแกรม 1: สรุปบริษัทต้นทาง — ย่อชื่อทีม (เก็บส่วนหลัง " - " ตัดรหัสตัวเลขท้ายและวงเล็บท้าย) และเว้นบรรทัดระหว่างหัวข้อ/ชื่อทีม/รายการ'],
   ['33.4', '2026-11-28', 'โปรแกรม 1: เปลี่ยนข้อความหัวของสรุปบริษัทต้นทางเป็น "แจ้งเพื่อทราบครับ งานต่อไปนี้ทางทีมกลางขอดึงเข้ามาดำเนินการแก้ไขต่อให้เองนะครับ ขอบคุณครับ"'],
@@ -2985,6 +2991,15 @@ document.addEventListener('click', e => {
   e.preventDefault(); try { history.replaceState(null, '', h ? '#' + h : location.pathname + location.search); } catch (x) { try { location.hash = h; } catch (y) {} }
   route(h);
 });
+
+/* ปุ่มลูกศรกลับขึ้นบนสุด (ลอยมุมขวาล่าง ใช้ได้ทุกโปรแกรม; โผล่เมื่อเลื่อนลงจากบนสุด) */
+(() => {
+  const btn = document.getElementById('toTop'); if (!btn) return;
+  const upd = () => { btn.hidden = (window.scrollY || document.documentElement.scrollTop || 0) < 120; };
+  window.addEventListener('scroll', upd, { passive: true }); window.addEventListener('resize', upd);
+  btn.addEventListener('click', () => { let smooth = true; try { smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {} window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' }); });
+  window.addEventListener('hashchange', upd); setInterval(upd, 600);
+})();
 
 init();
 P2.init();
