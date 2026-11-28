@@ -591,8 +591,9 @@ function klongOf(addr) {
 }
 
 /* เวอร์ชันโปรแกรม: แก้เล็กน้อย (เพิ่ม Title/แพ็กเกจ/คำไฮไลต์) = 24.1, 24.2 … ; แก้หลายหัวข้อใหญ่ = เลขถัดไป (25) */
-const APP_VERSION = '33.4';
+const APP_VERSION = '33.5';
 const CHANGELOG = [
+  ['33.5', '2026-11-28', 'โปรแกรม 1: สรุปบริษัทต้นทาง — ย่อชื่อทีม (เก็บส่วนหลัง " - " ตัดรหัสตัวเลขท้ายและวงเล็บท้าย) และเว้นบรรทัดระหว่างหัวข้อ/ชื่อทีม/รายการ'],
   ['33.4', '2026-11-28', 'โปรแกรม 1: เปลี่ยนข้อความหัวของสรุปบริษัทต้นทางเป็น "แจ้งเพื่อทราบครับ งานต่อไปนี้ทางทีมกลางขอดึงเข้ามาดำเนินการแก้ไขต่อให้เองนะครับ ขอบคุณครับ"'],
   ['33.3', '2026-11-28', 'โปรแกรม 1: สรุปบริษัทต้นทาง — ไฮไลต์การ์ดบริษัทที่คัดลอกแล้ว (จำไว้แม้รีเฟรช) ถ้ารายการเปลี่ยนหลังคัดลอกจะเตือนให้คัดลอกใหม่'],
   ['33.2', '2026-11-28', 'โปรแกรม 1: ข้อความคัดลอกของสรุปบริษัทต้นทางขึ้นต้นด้วย "งานที่ทีมกลางดึงมาวิ่งครับ" ตามด้วยชื่อบริษัท แล้วรายการ NON | วันเวลา'],
@@ -1771,17 +1772,22 @@ function emptyState() {
 }
 /* ===== สรุปรายการงานแจ้งบริษัทต้นทาง (แสดงเมื่อยืนยันแพลนแล้วเท่านั้น; คำนวณใหม่จากแพลนล่าสุดทุกครั้งที่วาดหน้า) ===== */
 const NO_CO = 'ไม่ระบุบริษัทต้นทาง';
+function shortCo(full) { // ชื่อทีมเต็ม → เก็บเฉพาะส่วนหลัง " - " ตัดรหัสตัวเลขท้ายและวงเล็บท้ายออก (ถ้าไม่มี " - " ใช้ชื่อเดิม)
+  const t = String(full || '').trim(); const i = t.lastIndexOf(' - '); if (i < 0) return t;
+  const c = t.slice(i + 3).replace(/_\d{4,}.*$/, '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+  return c || t;
+}
 function companyGroups(date) {
   const p = S.plans[date]; if (!p || !isFrozen(p)) return null;
   const g = {};
   Object.keys(p.assign || {}).forEach(k => {
     const j = S.jobs[k]; if (!j || j.cancelled || j.date !== date) return;
-    const co = (typeof teamOfRec === 'function' ? teamOfRec(j) : '') || NO_CO;
+    const co = shortCo(typeof teamOfRec === 'function' ? teamOfRec(j) : '') || NO_CO;
     (g[co] = g[co] || []).push({ non: j.access || '-', when: (j.date || '') + (j.timeStr ? ' ' + j.timeStr : ''), min: j.min == null ? 9999 : j.min });
   });
   return Object.keys(g).sort((x, y) => (x === NO_CO) - (y === NO_CO) || x.localeCompare(y, 'th')).map(co => {
     const rows = g[co].sort((x, y) => x.min - y.min || String(x.non).localeCompare(String(y.non)));
-    return { co, rows, text: 'แจ้งเพื่อทราบครับ งานต่อไปนี้ทางทีมกลางขอดึงเข้ามาดำเนินการแก้ไขต่อให้เองนะครับ ขอบคุณครับ\n' + co + '\n' + rows.map(r => r.non + ' | ' + r.when).join('\n') };
+    return { co, rows, text: 'แจ้งเพื่อทราบครับ งานต่อไปนี้ทางทีมกลางขอดึงเข้ามาดำเนินการแก้ไขต่อให้เองนะครับ ขอบคุณครับ\n\n' + co + '\n\n' + rows.map(r => r.non + ' | ' + r.when).join('\n') };
   });
 }
 function companyHtml(date) {
